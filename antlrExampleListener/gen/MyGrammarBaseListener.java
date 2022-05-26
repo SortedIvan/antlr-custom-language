@@ -51,13 +51,13 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableStatements(MyGrammarParser.VariableStatementsContext ctx) { }
+	@Override public void enterVariableStatement(MyGrammarParser.VariableStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableStatements(MyGrammarParser.VariableStatementsContext ctx) { }
+	@Override public void exitVariableStatement(MyGrammarParser.VariableStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -111,13 +111,13 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariable_statements(MyGrammarParser.Variable_statementsContext ctx) { }
+	@Override public void enterVariable_stat(MyGrammarParser.Variable_statContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariable_statements(MyGrammarParser.Variable_statementsContext ctx) { }
+	@Override public void exitVariable_stat(MyGrammarParser.Variable_statContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -166,6 +166,18 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCharVariable(MyGrammarParser.CharVariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValue_block(MyGrammarParser.Value_blockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValue_block(MyGrammarParser.Value_blockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -9,7 +9,7 @@ block
 
 // rules
 stat:   if_stat #ifStatement
-    | variable_statements #variableStatements
+    | variable_stat #variableStatement
     | expr #otherExpression
     ;
 
@@ -26,16 +26,28 @@ stat_block
  | stat
  ;
 
-variable_statements : (variables IDENTIFIER EQUAL (INT|BOOL|IDENTIFIER|STRING|CHAR))
-                    | (variables IDENTIFIER) ;
+variable_stat
+        : variable_block variable_name                   #initVar
+        | variable_block variable_name EQUAL value_block #initVarWithValue
+        ;
 
-variables :
+variable_block :
     BOOL_INIT #boolVariable
     |   STRING_INIT  #stringVariable
     |   INT_INIT     #intVariable
     |   CHAR_INIT    #charVariable
     ;
 
+variable_name :
+    IDENTIFIER #variableName
+    ;
+
+value_block :
+    INT
+    | STRING
+    | IDENTIFIER
+    | CHAR
+    ;
 
 expr:   expr op=(MUL|DIV) expr #  MulDiv
     |   expr op=(ADD|SUB) expr #  AddSub
@@ -44,15 +56,17 @@ expr:   expr op=(MUL|DIV) expr #  MulDiv
     |   NOT expr # Not
     |   expr OR expr # Or
     |   expr AND expr # And
-    |   expr op=(EQUAL | NEQUAL) expr # Equality
+    |   expr op=(EQUAL | NEQUAL | EQUALCHECK) expr # Equality
     |   OPAR expr CPAR  # parens
-//    |   INT     # int
-//    |   BOOL    # bool
-//    |   STRING  # string
-//    |   IDENTIFIER # identifier
-//    |   IF # if
-//    |   ELSE # else
+    |   INT     # int
+    |   BOOL    # bool
+    |   STRING  # string
+    |   IDENTIFIER # identifier
+    |   IF # if
+    |   ELSE # else
     |   EQUALCHECK #equalcheck
+    |   INT_INIT #intInit
+    |   STRING_INIT #stringInit
     ;
 
 // tokens
@@ -69,6 +83,10 @@ FACT:   '!';
 NOT: 'not';
 AND: '&&';
 OR: '||';
+INT_INIT: 'int_var';
+STRING_INIT: 'string_var';
+BOOL_INIT: 'bool_var';
+CHAR_INIT: 'char_var';
 IF: 'if';
 ELSE: 'else';
 FOR: 'for';
@@ -80,9 +98,7 @@ WS  : [ \t\r\n]+ -> skip;
 BOOL : 'TRUE' | 'FALSE';
 STRING : '"' (~["])+ '"';
 IDENTIFIER : [a-zA-Z_] [a-zA-Z_0-9]* ;
-CHAR : .;
-INT_INIT: 'int';
-STRING_INIT: 'string';
-BOOL_INIT: 'bool';
-CHAR_INIT: 'char';
+
+//CHAR : .;
+
 

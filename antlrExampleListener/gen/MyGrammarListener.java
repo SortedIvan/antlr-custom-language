@@ -52,6 +52,18 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitVariableStatement(MyGrammarParser.VariableStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code printStatement}
+	 * labeled alternative in {@link MyGrammarParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStatement(MyGrammarParser.PrintStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printStatement}
+	 * labeled alternative in {@link MyGrammarParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStatement(MyGrammarParser.PrintStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code otherExpression}
 	 * labeled alternative in {@link MyGrammarParser#stat}.
 	 * @param ctx the parse tree
@@ -94,15 +106,41 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitStat_block(MyGrammarParser.Stat_blockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#variable_stat}.
+	 * Enter a parse tree produced by the {@code initVar}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariable_stat(MyGrammarParser.Variable_statContext ctx);
+	void enterInitVar(MyGrammarParser.InitVarContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#variable_stat}.
+	 * Exit a parse tree produced by the {@code initVar}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariable_stat(MyGrammarParser.Variable_statContext ctx);
+	void exitInitVar(MyGrammarParser.InitVarContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code initVarWithValue}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitVarWithValue(MyGrammarParser.InitVarWithValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code initVarWithValue}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitVarWithValue(MyGrammarParser.InitVarWithValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code initVarWithStatementValue}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitVarWithStatementValue(MyGrammarParser.InitVarWithStatementValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code initVarWithStatementValue}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitVarWithStatementValue(MyGrammarParser.InitVarWithStatementValueContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code boolVariable}
 	 * labeled alternative in {@link MyGrammarParser#variable_block}.
@@ -152,15 +190,99 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitCharVariable(MyGrammarParser.CharVariableContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#value_block}.
+	 * Enter a parse tree produced by the {@code variableName}
+	 * labeled alternative in {@link MyGrammarParser#variable_name}.
 	 * @param ctx the parse tree
 	 */
-	void enterValue_block(MyGrammarParser.Value_blockContext ctx);
+	void enterVariableName(MyGrammarParser.VariableNameContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#value_block}.
+	 * Exit a parse tree produced by the {@code variableName}
+	 * labeled alternative in {@link MyGrammarParser#variable_name}.
 	 * @param ctx the parse tree
 	 */
-	void exitValue_block(MyGrammarParser.Value_blockContext ctx);
+	void exitVariableName(MyGrammarParser.VariableNameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#print_stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrint_stat(MyGrammarParser.Print_statContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#print_stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrint_stat(MyGrammarParser.Print_statContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printExpr}
+	 * labeled alternative in {@link MyGrammarParser#print_content}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintExpr(MyGrammarParser.PrintExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printExpr}
+	 * labeled alternative in {@link MyGrammarParser#print_content}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintExpr(MyGrammarParser.PrintExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code printVariable}
+	 * labeled alternative in {@link MyGrammarParser#print_content}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintVariable(MyGrammarParser.PrintVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code printVariable}
+	 * labeled alternative in {@link MyGrammarParser#print_content}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintVariable(MyGrammarParser.PrintVariableContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntValue(MyGrammarParser.IntValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntValue(MyGrammarParser.IntValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code stringValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringValue(MyGrammarParser.StringValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringValue(MyGrammarParser.StringValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code booleanValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBooleanValue(MyGrammarParser.BooleanValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code booleanValue}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBooleanValue(MyGrammarParser.BooleanValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code otherVariable}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void enterOtherVariable(MyGrammarParser.OtherVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code otherVariable}
+	 * labeled alternative in {@link MyGrammarParser#value_block}.
+	 * @param ctx the parse tree
+	 */
+	void exitOtherVariable(MyGrammarParser.OtherVariableContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code identifier}
 	 * labeled alternative in {@link MyGrammarParser#expr}.
@@ -294,6 +416,18 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitElse(MyGrammarParser.ElseContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code stringInit}
+	 * labeled alternative in {@link MyGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterStringInit(MyGrammarParser.StringInitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code stringInit}
+	 * labeled alternative in {@link MyGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitStringInit(MyGrammarParser.StringInitContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code And}
 	 * labeled alternative in {@link MyGrammarParser#expr}.
 	 * @param ctx the parse tree
@@ -317,6 +451,18 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEqualcheck(MyGrammarParser.EqualcheckContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code intInit}
+	 * labeled alternative in {@link MyGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterIntInit(MyGrammarParser.IntInitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code intInit}
+	 * labeled alternative in {@link MyGrammarParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitIntInit(MyGrammarParser.IntInitContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Pow}
 	 * labeled alternative in {@link MyGrammarParser#expr}.

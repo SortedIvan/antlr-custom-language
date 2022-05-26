@@ -8,6 +8,9 @@ import java.util.*;
 class MyListener extends MyGrammarBaseListener
 {
 	private final Stack<Integer> numberStack = new Stack<>();
+	Map<String, Integer> intVariables = new HashMap<String, Integer>();
+	Map<String, String> stringVariables = new HashMap<String, String>();
+	Map<String, Boolean> booleanVariables = new HashMap<String, Boolean>();
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
 	{ 
 		// TODO: investigate contents of 'ctx'
@@ -37,6 +40,42 @@ class MyListener extends MyGrammarBaseListener
 	public void exitOtherExpression(MyGrammarParser.OtherExpressionContext ctx) {
 		int result = numberStack.pop();
 		System.err.println("Final result is: " + result);
+	}
+
+	@Override
+	public void exitInitVarWithValue(MyGrammarParser.InitVarWithValueContext ctx) {
+		String varName = ctx.variable_name().getText();
+		Integer intValue = 0;
+		String stringValue ="";
+		Boolean boolValue = false;
+		if(ctx.variable_block().getText().equals("int_var")) {
+			intValue = Integer.parseInt(ctx.value_block().getText());
+			intVariables.put(varName, intValue);
+		}
+		else if(ctx.variable_block().getText().equals("string_var")) {
+			stringValue = ctx.value_block().getText();
+			stringVariables.put(varName, stringValue);
+		}
+		else if(ctx.variable_block().getText().equals("bool_var")) {
+			boolValue = Boolean.parseBoolean(ctx.value_block().getText());
+			booleanVariables.put(varName, boolValue);
+
+		}
+
+		System.out.println("value should be: " + ctx.value_block().getText());
+	}
+
+	@Override
+	public void exitPrintStatement(MyGrammarParser.PrintStatementContext ctx) {
+		if(intVariables.containsKey(ctx.print_stat().print_content().getText())){
+			System.out.println("printed: " + intVariables.get(ctx.print_stat().print_content().getText()));
+		}
+		else if(stringVariables.containsKey(ctx.print_stat().print_content().getText())){
+			System.out.println("printed: " + stringVariables.get(ctx.print_stat().print_content().getText()));
+		}
+		else if(booleanVariables.containsKey(ctx.print_stat().print_content().getText())){
+			System.out.println("printed: " + booleanVariables.get(ctx.print_stat().print_content().getText()));
+		}
 	}
 
 	@Override

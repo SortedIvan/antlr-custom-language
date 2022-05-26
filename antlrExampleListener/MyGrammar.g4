@@ -10,6 +10,7 @@ block
 // rules
 stat:   if_stat #ifStatement
     | variable_stat #variableStatement
+    | print_stat #printStatement
     | expr #otherExpression
     ;
 
@@ -29,6 +30,7 @@ stat_block
 variable_stat
         : variable_block variable_name                   #initVar
         | variable_block variable_name EQUAL value_block #initVarWithValue
+        | variable_block variable_name EQUAL stat        #initVarWithStatementValue
         ;
 
 variable_block :
@@ -42,11 +44,20 @@ variable_name :
     IDENTIFIER #variableName
     ;
 
+print_stat
+        : PRINT OPAR print_content CPAR
+        ;
+
+print_content
+        : expr #printExpr
+        | variable_stat #printVariable
+        ;
+
 value_block :
-    INT
-    | STRING
-    | IDENTIFIER
-    | CHAR
+    INT #intValue
+    | STRING #stringValue
+    | BOOL #booleanValue
+    | IDENTIFIER #otherVariable
     ;
 
 expr:   expr op=(MUL|DIV) expr #  MulDiv
@@ -87,6 +98,7 @@ INT_INIT: 'int_var';
 STRING_INIT: 'string_var';
 BOOL_INIT: 'bool_var';
 CHAR_INIT: 'char_var';
+PRINT: 'print';
 IF: 'if';
 ELSE: 'else';
 FOR: 'for';
@@ -95,7 +107,7 @@ NEQUAL: '!=';
 EQUALCHECK: '==';
 INT     : [0-9]+ ;
 WS  : [ \t\r\n]+ -> skip;
-BOOL : 'TRUE' | 'FALSE';
+BOOL : 'true' | 'false';
 STRING : '"' (~["])+ '"';
 IDENTIFIER : [a-zA-Z_] [a-zA-Z_0-9]* ;
 

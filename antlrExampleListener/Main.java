@@ -76,6 +76,12 @@ class MyListener extends MyGrammarBaseListener
 		else if(booleanVariables.containsKey(ctx.print_stat().print_content().getText())){
 			System.out.println("printed: " + booleanVariables.get(ctx.print_stat().print_content().getText()));
 		}
+		else if(ctx.print_stat().print_content().getText().charAt(0) == '"'){
+			System.out.println("printed: " + ctx.print_stat().print_content().getText());
+		}
+		else{
+			System.out.println("printed: " + this.numberStack.pop());
+		}
 	}
 
 	@Override

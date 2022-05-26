@@ -1,6 +1,10 @@
 int_var a = 3
 string_var b = "Joris joris joris"
 bool_var c = true
+
 print(a)
 print(b)
 print(c)
+
+print(1+2)
+print("Hello world")

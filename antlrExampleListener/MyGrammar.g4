@@ -27,10 +27,12 @@ stat_block
  | stat
  ;
 
+//stat must be changed to expr
 variable_stat
         : variable_block variable_name                   #initVar
         | variable_block variable_name EQUAL value_block #initVarWithValue
-        | variable_block variable_name EQUAL stat        #initVarWithStatementValue
+        | variable_block variable_name EQUAL expr        #initVarWithStatementValue
+        | variable_block variable_name EQUAL variable_stat #initVarToVar
         ;
 
 variable_block :

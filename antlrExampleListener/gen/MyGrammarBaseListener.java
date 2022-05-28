@@ -159,6 +159,18 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterInitVarToVar(MyGrammarParser.InitVarToVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInitVarToVar(MyGrammarParser.InitVarToVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBoolVariable(MyGrammarParser.BoolVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}

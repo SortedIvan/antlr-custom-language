@@ -1,10 +1,5 @@
-int_var a = 3
-string_var b = "Joris joris joris"
-bool_var c = true
-
-print(a)
+int_var b = 10 - 8
 print(b)
-print(c)
 
-print(1+2)
-print("Hello world")
+int_var a = b
+print(a)

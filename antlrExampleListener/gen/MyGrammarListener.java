@@ -142,6 +142,18 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitInitVarWithStatementValue(MyGrammarParser.InitVarWithStatementValueContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code initVarToVar}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterInitVarToVar(MyGrammarParser.InitVarToVarContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code initVarToVar}
+	 * labeled alternative in {@link MyGrammarParser#variable_stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitInitVarToVar(MyGrammarParser.InitVarToVarContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code boolVariable}
 	 * labeled alternative in {@link MyGrammarParser#variable_block}.
 	 * @param ctx the parse tree

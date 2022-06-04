@@ -64,28 +64,11 @@ class Value {
 class MyVisitor extends Example2BaseVisitor<Value>
 {
     Map<String, Value> storage = new HashMap<String, Value>();
+    Map<String, Value> storageZ3 = new HashMap<String, Value>();
 	// MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
     // is called when running the application
 	// (see Example2BaseVisitor.java: this Example2BaseVisitor.visitAndExpr() calls visitChildren())
 
-
-    @Override public Value visitLoop(Example2Parser.LoopContext ctx)
-	{ 
-		System.err.println("loop: visit 'statement'-child only");
-		Value v = visit(ctx.block());
-		return v; 
-	}
-	@Override public Value visitPrint(Example2Parser.PrintContext ctx) 
-	{ 
-		System.err.println("print: visit all children");
-		Value v = visitChildren(ctx);
-		return v;
-	}
-	@Override public Value visitIfStat(Example2Parser.IfStatContext ctx) 
-	{ 
-		System.err.println("if: visit no children at all");
-		return Value.VOID;
-	}
 
     @Override
     public Value visitStart2(Example2Parser.Start2Context ctx) {
@@ -163,6 +146,8 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return value;
     }
 
+    /////////////// MATH operations
+
     @Override
     public Value visitADD(Example2Parser.ADDContext ctx) {
         Value first = visit(ctx.mathExpression(0));
@@ -171,13 +156,57 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return new Value((Integer.parseInt(first.asString())) + (Integer.parseInt(second.asString())));
     }
 
-    ////////////// BOOL
+    @Override
+    public Value visitSUB(Example2Parser.SUBContext ctx) {
+        Value first = visit(ctx.mathExpression(0));
+        Value second = visit(ctx.mathExpression(1));
+
+        return new Value((Integer.parseInt(first.asString())) - (Integer.parseInt(second.asString())));
+    }
+
+    @Override
+    public Value visitMUL(Example2Parser.MULContext ctx) {
+        Value first = visit(ctx.mathExpression(0));
+        Value second = visit(ctx.mathExpression(1));
+
+        return new Value((Integer.parseInt(first.asString())) * (Integer.parseInt(second.asString())));
+    }
+
+    @Override
+    public Value visitDIV(Example2Parser.DIVContext ctx) {
+        Value first = visit(ctx.mathExpression(0));
+        Value second = visit(ctx.mathExpression(1));
+        if ((Integer.parseInt(second.asString()) == 0)){
+            return new Value("CANNOT DIVIDE BY ZERO");
+        }
+        return new Value((Integer.parseInt(first.asString()) / (Integer.parseInt(second.asString()))));
+    }
+
+    @Override
+    public Value visitPOW(Example2Parser.POWContext ctx) {
+        Value first = visit(ctx.mathExpression(0));
+        Value second = visit(ctx.mathExpression(1));
+
+        return new Value(Math.pow((Integer.parseInt(first.asString())), (Integer.parseInt(second.asString()))));
+    }
+
+    @Override
+    public Value visitFACT(Example2Parser.FACTContext ctx) {
+        Value first = visit(ctx.mathExpression());
+        int result = 1;
+        int i;
+        for (i = 1; i <= Integer.parseInt(first.asString()); i ++){
+            result *= i;
+        }
+        return new Value(result);
+    }
 
     @Override
     public Value visitValueNumber(Example2Parser.ValueNumberContext ctx) {
         Value number = visit(ctx.NUMBER());
         return (number);
     }
+    ////////////// BOOL
 
     @Override
     public Value visitBoolAssignment(Example2Parser.BoolAssignmentContext ctx) {
@@ -211,7 +240,23 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return (bool);
     }
 
-    ///////////// IF Statement
+    ///////////// BOOL Expressions
+
+    @Override
+    public Value visitANDoperation(Example2Parser.ANDoperationContext ctx) {
+        if(visit(ctx.mathExpression().get(0)).asBoolean() && visit(ctx.mathExpression().get(1)).asBoolean()){
+            return new Value(true);
+        }
+        return new Value(false);
+    }
+
+    @Override
+    public Value visitORoperation(Example2Parser.ORoperationContext ctx) {
+        if(visit(ctx.mathExpression().get(0)).asBoolean() || visit(ctx.mathExpression().get(1)).asBoolean()){
+            return new Value(true);
+        }
+        return new Value(false);
+    }
 
 
     @Override
@@ -241,13 +286,208 @@ class MyVisitor extends Example2BaseVisitor<Value>
     }
 
     @Override
+    public Value visitNOToperation(Example2Parser.NOToperationContext ctx) {
+        if(storage.containsKey(ctx.mathExpression().get(0).getText()) && storage.containsKey(ctx.mathExpression().get(1).getText()) ){
+            if(storage.get(ctx.mathExpression().get(0).getText()) != storage.get(ctx.mathExpression().get(1).getText())){
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(storage.containsKey(ctx.mathExpression().get(0).getText())){       // a == 1 or a == 1+ 1 or a == b + 1
+            if(!storage.get(ctx.mathExpression().get(0).getText()).asString().equals(visit(ctx.mathExpression().get(1)).toString())){ //a == 1+1
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(!visit(ctx.mathExpression().get(0)).toString().equals(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
+            System.err.println("[true]");
+            return new Value(true);
+        }
+        System.err.println("[not even close]");
+        return new Value(false);
+    }
+
+    @Override
+    public Value visitSMALLOREQUALoperation(Example2Parser.SMALLOREQUALoperationContext ctx) {
+        if(storage.containsKey(ctx.mathExpression().get(0).getText()) && storage.containsKey(ctx.mathExpression().get(1).getText()) ){
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString()) <=
+                    Integer.parseInt(storage.get(ctx.mathExpression().get(1).getText()).asString())){
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(storage.containsKey(ctx.mathExpression().get(0).getText())){       // a == 1 or a == 1+ 1 or a == b + 1
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString())
+                    <= Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){ //a == 1+1
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(Integer.parseInt(visit(ctx.mathExpression().get(0)).toString()) <= Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
+            System.err.println("[true]");
+            return new Value(true);
+        }
+        System.err.println("[not even close]");
+        return new Value(false);
+    }
+
+    @Override
+    public Value visitBIGOREQUALoperation(Example2Parser.BIGOREQUALoperationContext ctx) {
+        if(storage.containsKey(ctx.mathExpression().get(0).getText()) && storage.containsKey(ctx.mathExpression().get(1).getText()) ){
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString()) >=
+                    Integer.parseInt(storage.get(ctx.mathExpression().get(1).getText()).asString())){
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(storage.containsKey(ctx.mathExpression().get(0).getText())){       // a == 1 or a == 1+ 1 or a == b + 1
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString())
+                    >= Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){ //a == 1+1
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(Integer.parseInt(visit(ctx.mathExpression().get(0)).toString()) >= Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
+            System.err.println("[true]");
+            return new Value(true);
+        }
+        System.err.println("[not even close]");
+        return new Value(false);
+    }
+
+    @Override
+    public Value visitBIGGERoperation(Example2Parser.BIGGERoperationContext ctx) {
+        if(storage.containsKey(ctx.mathExpression().get(0).getText()) && storage.containsKey(ctx.mathExpression().get(1).getText()) ){
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString()) >
+                    Integer.parseInt(storage.get(ctx.mathExpression().get(1).getText()).asString())){
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(storage.containsKey(ctx.mathExpression().get(0).getText())){       // a == 1 or a == 1+ 1 or a == b + 1
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString())
+                    > Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){ //a == 1+1
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(Integer.parseInt(visit(ctx.mathExpression().get(0)).toString()) > Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
+            System.err.println("[true]");
+            return new Value(true);
+        }
+        System.err.println("[not even close]");
+        return new Value(false);
+    }
+
+    @Override
+    public Value visitSMALLERoperation(Example2Parser.SMALLERoperationContext ctx) {
+        if(storage.containsKey(ctx.mathExpression().get(0).getText()) && storage.containsKey(ctx.mathExpression().get(1).getText()) ){
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString()) <
+                    Integer.parseInt(storage.get(ctx.mathExpression().get(1).getText()).asString())){
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(storage.containsKey(ctx.mathExpression().get(0).getText())){       // a == 1 or a == 1+ 1 or a == b + 1
+            System.err.println("FIRST" + Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString()));
+            if(Integer.parseInt(storage.get(ctx.mathExpression().get(0).getText()).asString())
+                    < Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){ //a == 1+1
+                System.err.println("[true]");
+                return new Value(true);
+            }
+            System.err.println("[false]");
+            return new Value(false);
+        }
+        else if(Integer.parseInt(visit(ctx.mathExpression().get(0)).toString()) < Integer.parseInt(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
+            System.err.println("[true]");
+            return new Value(true);
+        }
+        System.err.println("[not even close]");
+        return new Value(false);
+    }
+
+    ///////////// IF Statement
+
+    @Override
     public Value visitIfStatement(Example2Parser.IfStatementContext ctx) {
             if (visit(ctx.ifStat().expression().getChild(0)).asBoolean()){
-                System.err.println("[in: " + ctx.ifStat().block().get(0).getText() + "]");
-                visit(ctx.ifStat().block().get(0));
+                System.err.println("[in: " + ctx.ifStat().statement().get(0).getText() + "]"); visit(ctx.ifStat().statement().get(0));
             }
-        return(null);
+            else if(ctx.ifStat().children.get(4).getText().equals("else")){
+                System.err.println("[in: " + ctx.ifStat().statement().get(1).getText() + "]");
+                visit(ctx.ifStat().statement().get(1));
+            }
+        return(Value.VOID);
     }
+
+
+    ///////////// WHILE Statement
+
+
+    @Override
+    public Value visitLoopStatement(Example2Parser.LoopStatementContext ctx) {
+        System.err.println("[in: " + ctx.loop().expression().getText() + "]");
+        System.err.println("[in: " + ctx.loop().statement().getText() + "]");
+        while(visit(ctx.loop().expression().getChild(0)).asBoolean()){
+            visit(ctx.loop().statement());
+        }
+        return(Value.VOID);
+    }
+
+    ///////////// PRINT Statement
+
+
+    @Override
+    public Value visitPrintExpr(Example2Parser.PrintExprContext ctx) {
+        System.err.println("[ print(" + visit(ctx.expression()) + ") ]");
+        return(Value.VOID);
+    }
+
+
+    ///////////////////// Z3 SudokuA Week 3
+
+
+    @Override
+    public Value visitDefineFunBody(Example2Parser.DefineFunBodyContext ctx) {
+        Value value = visit(ctx.NUMBER());
+        storageZ3.put(ctx.Z3VARNAME().getText(), value);
+        if(storageZ3.size() == 81){
+            for (int i = 1; i <= 9; i++){
+                if(i == 4 || i == 7){
+                    System.err.println(" ---------------------");
+                }
+                for (int j = 1; j <= 9; j++) {
+                    if(j == 3 || j == 6){
+                        System.err.print(" " + storageZ3.get("a" + i + j) + " |");
+                    }
+                    else{
+                        System.err.print(" " + storageZ3.get("a" + i + j) + "");
+                    }
+                }
+                System.err.println();
+            }
+        }
+        return(Value.VOID);
+    }
+
 
     @Override public Value visitUrl(Example2Parser.UrlContext ctx)
 	{
@@ -263,14 +503,9 @@ class MyVisitor extends Example2BaseVisitor<Value>
 	
 	@Override public Value visitTerminal(TerminalNode node)
 	{
-//		System.err.println("[" + node.getText() + "]");
 		return (new Value (node.getText()));
 	}
 
-//    @Override
-//    public Value visitAndExpr(Example2Parser.AndExprContext ctx) {
-//        return super.visitAndExpr(ctx);
-//    }
 }
 
 public class Main {

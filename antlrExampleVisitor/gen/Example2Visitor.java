@@ -18,46 +18,60 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	T visitStart2(Example2Parser.Start2Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code expr}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitExpr(Example2Parser.ExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code assignVariable}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAssignVariable(Example2Parser.AssignVariableContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code print}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitPrint(Example2Parser.PrintContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code loopStatement}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLoopStatement(Example2Parser.LoopStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ifStatement}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIfStatement(Example2Parser.IfStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code urlStatement}
-	 * labeled alternative in {@link Example2Parser#block}.
+	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitUrlStatement(Example2Parser.UrlStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Z3OutputWeek3}
+	 * labeled alternative in {@link Example2Parser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZ3OutputWeek3(Example2Parser.Z3OutputWeek3Context ctx);
+	/**
+	 * Visit a parse tree produced by the {@code loopBody}
+	 * labeled alternative in {@link Example2Parser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoopBody(Example2Parser.LoopBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#loop}.
 	 * @param ctx the parse tree
@@ -76,13 +90,6 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUrl(Example2Parser.UrlContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code printVariable}
-	 * labeled alternative in {@link Example2Parser#print_statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrintVariable(Example2Parser.PrintVariableContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code printExpr}
 	 * labeled alternative in {@link Example2Parser#print_statement}.
@@ -160,13 +167,6 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStringAssignValue(Example2Parser.StringAssignValueContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code DIV}
-	 * labeled alternative in {@link Example2Parser#mathExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDIV(Example2Parser.DIVContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code ADD}
 	 * labeled alternative in {@link Example2Parser#mathExpression}.
 	 * @param ctx the parse tree
@@ -181,12 +181,12 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSUB(Example2Parser.SUBContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ValueVariable}
+	 * Visit a parse tree produced by the {@code BIGGERoperation}
 	 * labeled alternative in {@link Example2Parser#mathExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitValueVariable(Example2Parser.ValueVariableContext ctx);
+	T visitBIGGERoperation(Example2Parser.BIGGERoperationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code StringValueExpr}
 	 * labeled alternative in {@link Example2Parser#mathExpression}.
@@ -209,6 +209,62 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEQUALCheck(Example2Parser.EQUALCheckContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code FACT}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFACT(Example2Parser.FACTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code DIV}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDIV(Example2Parser.DIVContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ORoperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitORoperation(Example2Parser.ORoperationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SMALLERoperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSMALLERoperation(Example2Parser.SMALLERoperationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ValueVariable}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueVariable(Example2Parser.ValueVariableContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code NOToperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNOToperation(Example2Parser.NOToperationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ANDoperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitANDoperation(Example2Parser.ANDoperationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BIGOREQUALoperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBIGOREQUALoperation(Example2Parser.BIGOREQUALoperationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code ValueNumber}
 	 * labeled alternative in {@link Example2Parser#mathExpression}.
 	 * @param ctx the parse tree
@@ -223,19 +279,33 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPOW(Example2Parser.POWContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code FACT}
-	 * labeled alternative in {@link Example2Parser#mathExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFACT(Example2Parser.FACTContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code parents}
 	 * labeled alternative in {@link Example2Parser#mathExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParents(Example2Parser.ParentsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code SMALLOREQUALoperation}
+	 * labeled alternative in {@link Example2Parser#mathExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSMALLOREQUALoperation(Example2Parser.SMALLOREQUALoperationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code satBody}
+	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSatBody(Example2Parser.SatBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code defineFunBody}
+	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefineFunBody(Example2Parser.DefineFunBodyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#numberA}.
 	 * @param ctx the parse tree

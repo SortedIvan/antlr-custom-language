@@ -65,7 +65,9 @@ class MyVisitor extends Example2BaseVisitor<Value>
 {
     Map<String, Value> storage = new HashMap<String, Value>();
     Map<String, Value> storageZ3 = new HashMap<String, Value>();
-	// MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
+    List<String> functions = new ArrayList<String>();
+    List<Example2Parser.DeclareFunctionContext> functions2 = new ArrayList<Example2Parser.DeclareFunctionContext>();
+    // MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
     // is called when running the application
 	// (see Example2BaseVisitor.java: this Example2BaseVisitor.visitAndExpr() calls visitChildren())
 
@@ -82,7 +84,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
         String id = ctx.ID().getText();
         Value value = null;
         if(storage.get(id) != null){
-            value = this.visit(ctx.STRING());
+            value = this.visit(ctx.statement());
             storage.put(id, value);
             System.err.println("memory put: " + id + " = " + value);
         }
@@ -93,12 +95,12 @@ class MyVisitor extends Example2BaseVisitor<Value>
     public Value visitStringAssignment(Example2Parser.StringAssignmentContext ctx) {
         String id = ctx.ID().getText();
         Value value = null;
-        if(ctx.STRING() == null){
+        if(ctx.statement() == null){
             value = new Value("");
             storage.put(id, value);
             System.err.println("memory put: " + id + " = " + value);
         }else {
-            value = this.visit(ctx.STRING());
+            value = this.visit(ctx.statement());
             storage.put(id, value);
             System.err.println("memory put: " + id + " = " + value);
         }
@@ -111,12 +113,12 @@ class MyVisitor extends Example2BaseVisitor<Value>
     public Value visitIntAssignment(Example2Parser.IntAssignmentContext ctx) {
         String id = ctx.ID().getText();
         Value value = null;
-        if(ctx.mathExpression() == null){
+        if(ctx.statement() == null){
             value = new Value(0);
             storage.put(id, value);
             System.err.println("memory put: " + id + " = " + value);
         }else {
-            value = this.visit(ctx.mathExpression());
+            value = this.visit(ctx.statement());
             storage.put(id, value);
             System.err.println("memory put: " + id + " = " + value);
         }
@@ -128,7 +130,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
         String id = ctx.ID().getText();
         Value value = null;
         if(storage.get(id) != null){
-            value = this.visit(ctx.mathExpression());
+            value = this.visit(ctx.statement());
             storage.put(id, value);
             System.err.println("value changed: " + id + " = " + value);
         }
@@ -461,6 +463,30 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return(Value.VOID);
     }
 
+
+    /////////////////////Declare Integer Function
+
+    @Override
+    public Value visitDeclareFunction(Example2Parser.DeclareFunctionContext ctx) {
+        functions.add(ctx.declareFunctions().ID().getText());
+        functions2.add(ctx);
+        return (Value.VOID);
+    }
+
+    @Override
+    public Value visitCallFunctions(Example2Parser.CallFunctionsContext ctx) {
+        Value result = null;
+        for (String name : functions) {
+            for (Example2Parser.DeclareFunctionContext contekst:functions2) {
+                if(name.equals(contekst.declareFunctions().ID().getText())){
+                    visit(contekst.declareFunctions().statement());
+                    result = visit(contekst.declareFunctions().expression(contekst.declareFunctions().expression().size()-1));
+                    System.err.println("[ return value: " + result + " ]");
+                }
+            }
+        }
+        return (result);
+    }
 
     ///////////////////// Z3 SudokuA Week 3
 

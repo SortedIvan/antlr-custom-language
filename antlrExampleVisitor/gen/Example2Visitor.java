@@ -66,12 +66,26 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitZ3OutputWeek3(Example2Parser.Z3OutputWeek3Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code loopBody}
+	 * Visit a parse tree produced by the {@code statementBody}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLoopBody(Example2Parser.LoopBodyContext ctx);
+	T visitStatementBody(Example2Parser.StatementBodyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declareFunction}
+	 * labeled alternative in {@link Example2Parser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunction(Example2Parser.DeclareFunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code callFunctions}
+	 * labeled alternative in {@link Example2Parser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallFunctions(Example2Parser.CallFunctionsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#loop}.
 	 * @param ctx the parse tree
@@ -292,6 +306,46 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitSMALLOREQUALoperation(Example2Parser.SMALLOREQUALoperationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#declareFunctions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunctions(Example2Parser.DeclareFunctionsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declareFunVoid}
+	 * labeled alternative in {@link Example2Parser#declare_body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunVoid(Example2Parser.DeclareFunVoidContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declareFunString}
+	 * labeled alternative in {@link Example2Parser#declare_body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunString(Example2Parser.DeclareFunStringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declareFunInt}
+	 * labeled alternative in {@link Example2Parser#declare_body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunInt(Example2Parser.DeclareFunIntContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declareFunBool}
+	 * labeled alternative in {@link Example2Parser#declare_body}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclareFunBool(Example2Parser.DeclareFunBoolContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#call_functions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCall_functions(Example2Parser.Call_functionsContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code satBody}
 	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.

@@ -11,7 +11,9 @@ statement //statement
  | ifStat #ifStatement
  | url #urlStatement
  | z3OutputSudokuA #Z3OutputWeek3
- | LEFTCURL statement+ RIGHTCURL #loopBody
+ | LEFTCURL statement+ RIGHTCURL #statementBody
+ | declareFunctions #declareFunction
+ | call_functions #callFunctions
  ;
 
 loop		: WHILE expression DO statement;
@@ -33,16 +35,16 @@ variable : int_variable
          | string_variable
          ;
 
-int_variable : INT_INIT ID (EQUAL mathExpression)? #intAssignment
-               | ID EQUAL mathExpression #intAssignValue
+int_variable : INT_INIT ID (EQUAL statement)? #intAssignment
+               | ID EQUAL statement #intAssignValue
                ;
 
 bool_variable : BOOL_INIT ID (EQUAL mathExpression)? #boolAssignment
                | BOOL_INIT ID EQUAL BOOL #boolAssignValue
                ;
 
-string_variable : STRING_INIT ID (EQUAL STRING)? #stringAssignment
-               | ID EQUAL STRING #stringAssignValue
+string_variable : STRING_INIT ID (EQUAL statement)? #stringAssignment
+               | ID EQUAL statement #stringAssignValue
                ;
 
 mathExpression: mathExpression op=MUL mathExpression # MUL
@@ -65,6 +67,17 @@ mathExpression: mathExpression op=MUL mathExpression # MUL
                | ID #ValueVariable
                ;
 
+declareFunctions: declare_body ID OPAR expression? CPAR statement RETURN expression
+                ;
+
+declare_body: DECLAREFUNVOID    #declareFunVoid
+            | DECLAREFUNSTRING  #declareFunString
+            | DECLAREFUNINT     #declareFunInt
+            | DECLAREFUNBOOL    #declareFunBool
+            ;
+
+call_functions: ID OPAR expression? CPAR
+                ;
 
 z3OutputSudokuA: SAT OPAR z3OutputSudokuA* CPAR #satBody
                 | OPAR DEFINEFUN Z3VARNAME OPAR CPAR Z3INT NUMBER CPAR #defineFunBody
@@ -109,6 +122,11 @@ ELSE: 'else';
 FOR: 'for';
 SAT: 'sat';
 DEFINEFUN: 'define-fun';
+DECLAREFUNVOID: 'declare_fun_void';
+DECLAREFUNSTRING: 'declare_fun_string';
+DECLAREFUNINT: 'declare_fun_int';
+DECLAREFUNBOOL: 'declare_fun_bool';
+RETURN: 'return';
 Z3INT: 'Int';
 Z3VARNAME: [a-z][0-9][0-9]*;
 EQUAL: '=';

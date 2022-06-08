@@ -4,8 +4,8 @@ grammar Example2;
 start2: statement* EOF;
 
 statement //statement
- : expression #expr
- | variable #assignVariable
+ :
+ variable #assignVariable
  | print_statement #print
  | loop #loopStatement
  | ifStat #ifStatement
@@ -14,6 +14,7 @@ statement //statement
  | LEFTCURL statement+ RIGHTCURL #statementBody
  | declareFunctions #declareFunction
  | call_functions #callFunctions
+ | expression #expr
  ;
 
 loop		: WHILE expression DO statement;
@@ -68,7 +69,7 @@ mathExpression: mathExpression op=MUL mathExpression # MUL
                | ID #ValueVariable
                ;
 
-declareFunctions: declare_body ID OPAR expression? CPAR statement RETURN expression
+declareFunctions: declare_body ID OPAR function_parameters CPAR statement RETURN expression
                 ;
 
 declare_body: DECLAREFUNVOID    #declareFunVoid
@@ -77,8 +78,16 @@ declare_body: DECLAREFUNVOID    #declareFunVoid
             | DECLAREFUNBOOL    #declareFunBool
             ;
 
-call_functions: ID OPAR expression? CPAR
+call_functions: ID OPAR expression* CPAR
                 ;
+
+parameter_variables: STRING_PARAM ID
+                    | BOOL_PARAM ID
+                    | INT_PARAM ID
+                    ;
+
+function_parameters: (parameter_variables*)
+;
 
 z3OutputSudokuA: SAT OPAR z3OutputSudokuA* CPAR #satBody
                 | OPAR DEFINEFUN Z3VARNAME OPAR CPAR Z3INT NUMBER CPAR #defineFunBody
@@ -112,6 +121,11 @@ INT_INIT: 'int_var';
 STRING_INIT: 'string_var';
 BOOL_INIT: 'bool_var';
 CHAR_INIT: 'char_var';
+
+INT_PARAM: 'int_par';
+STRING_PARAM: 'string_par';
+BOOL_PARAM: 'bool_par';
+
 PRINT: 'print';
 IF: 'if';
 FOR: 'for';

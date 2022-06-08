@@ -69,7 +69,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     // MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
     // is called when running the application
-	// (see Example2BaseVisitor.java: this Example2BaseVisitor.visitAndExpr() calls visitChildren())
+    // (see Example2BaseVisitor.java: this Example2BaseVisitor.visitAndExpr() calls visitChildren())
 
 
     @Override
@@ -280,8 +280,8 @@ class MyVisitor extends Example2BaseVisitor<Value>
             return new Value(false);
         }
         else if(visit(ctx.mathExpression().get(0)).toString().equals(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
-              System.err.println("[true]");
-                return new Value(true);
+            System.err.println("[true]");
+            return new Value(true);
         }
         System.err.println("[not even close]");
         return new Value(false);
@@ -430,13 +430,13 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     @Override
     public Value visitIfStatement(Example2Parser.IfStatementContext ctx) {
-            if (visit(ctx.ifStat().expression().getChild(0)).asBoolean()){
-                System.err.println("[in: " + ctx.ifStat().statement().get(0).getText() + "]"); visit(ctx.ifStat().statement().get(0));
-            }
-            else if(ctx.ifStat().children.get(4).getText().equals("else")){
-                System.err.println("[in: " + ctx.ifStat().statement().get(1).getText() + "]");
-                visit(ctx.ifStat().statement().get(1));
-            }
+        if (visit(ctx.ifStat().expression().getChild(0)).asBoolean()){
+            System.err.println("[in: " + ctx.ifStat().statement().get(0).getText() + "]"); visit(ctx.ifStat().statement().get(0));
+        }
+        else if(ctx.ifStat().children.get(4).getText().equals("else")){
+            System.err.println("[in: " + ctx.ifStat().statement().get(1).getText() + "]");
+            visit(ctx.ifStat().statement().get(1));
+        }
         return(Value.VOID);
     }
 
@@ -481,9 +481,13 @@ class MyVisitor extends Example2BaseVisitor<Value>
         Value result = null;
         for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
             if(entry.getKey().equals(ctx.call_functions().ID().getText())){
+                if(entry.getValue().declareFunctions().function_parameters().parameter_variables().size() !=0){
+                    storage.put(entry.getValue().declareFunctions().function_parameters().parameter_variables(0).ID().getText(),
+                            visit(ctx.call_functions().expression().get(0)));
+                }
                 visit(entry.getValue().declareFunctions().statement());
-                System.err.println(visit(entry.getValue().declareFunctions().expression(entry.getValue().declareFunctions().expression().size()-1)));
-                result = visit(entry.getValue().declareFunctions().expression(entry.getValue().declareFunctions().expression().size()-1));
+                System.err.println(visit(entry.getValue().declareFunctions().expression()));
+                result = visit(entry.getValue().declareFunctions().expression());
                 System.err.println("[ return value: " + result + " ]");
             }
         }
@@ -518,37 +522,37 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
 
     @Override public Value visitUrl(Example2Parser.UrlContext ctx)
-	{
-		Value nA, nB, nC, nD;
-		
-		nA = visit(ctx.numberD());
-		nB = visit(ctx.numberC());
-		nC = visit(ctx.numberB());
-		nD = visit(ctx.numberA());
-		System.err.println("URL: " + nA + "." + nB + "." + nC + "." + nD);
-		return (Value.VOID);
-	}
-	
-	@Override public Value visitTerminal(TerminalNode node)
-	{
-		return (new Value (node.getText()));
-	}
+    {
+        Value nA, nB, nC, nD;
+
+        nA = visit(ctx.numberD());
+        nB = visit(ctx.numberC());
+        nC = visit(ctx.numberB());
+        nD = visit(ctx.numberA());
+        System.err.println("URL: " + nA + "." + nB + "." + nC + "." + nD);
+        return (Value.VOID);
+    }
+
+    @Override public Value visitTerminal(TerminalNode node)
+    {
+        return (new Value (node.getText()));
+    }
 
 }
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-		
+
         CharStream input = CharStreams.fromStream(System.in);
-		Example2Lexer lexer = new Example2Lexer(input);
+        Example2Lexer lexer = new Example2Lexer(input);
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
         Example2Parser parser = new Example2Parser(tokens);
 
         ParseTree tree = parser.start2();
-		
+
         Example2Visitor<Value> visitor = new MyVisitor();
         visitor.visit(tree);
     }

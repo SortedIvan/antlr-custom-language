@@ -1,6 +1,4 @@
-int_var a = 999
-int_var b = 3
-int_var c = 0
+int_var a = 0
+declare_fun_int DEBA(int_par b int_par d) {a = b + d} return a
 
-declare_fun_int DEBA() {c = a + b} return c
-declare_fun_int DEBA2() {int_var hello = DEBA() hello = hello + 1} return hello
+int_var c = DEBA(3 4)

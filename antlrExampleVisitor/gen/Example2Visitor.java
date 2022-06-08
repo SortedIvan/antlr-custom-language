@@ -17,13 +17,6 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStart2(Example2Parser.Start2Context ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expr}
-	 * labeled alternative in {@link Example2Parser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpr(Example2Parser.ExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code assignVariable}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
@@ -87,24 +80,18 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCallFunctions(Example2Parser.CallFunctionsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code forLoopStatement}
+	 * Visit a parse tree produced by the {@code expr}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForLoopStatement(Example2Parser.ForLoopStatementContext ctx);
+	T visitExpr(Example2Parser.ExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#loop}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLoop(Example2Parser.LoopContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link Example2Parser#forLoop}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForLoop(Example2Parser.ForLoopContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#ifStat}.
 	 * @param ctx the parse tree
@@ -359,6 +346,18 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCall_functions(Example2Parser.Call_functionsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#parameter_variables}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter_variables(Example2Parser.Parameter_variablesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#function_parameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction_parameters(Example2Parser.Function_parametersContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code satBody}
 	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.

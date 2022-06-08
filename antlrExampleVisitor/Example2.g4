@@ -18,6 +18,7 @@ statement //statement
 
 loop		: WHILE expression DO statement;
 
+
 ifStat		: IF expression THEN LEFTCURL statement RIGHTCURL( ELSE statement )? FI;
 
 url			: numberA DOT numberB DOT numberC DOT numberD;
@@ -113,13 +114,13 @@ BOOL_INIT: 'bool_var';
 CHAR_INIT: 'char_var';
 PRINT: 'print';
 IF: 'if';
+FOR: 'for';
 FI			: 'fi';
 WHILE		: 'while';
 THEN		: 'then';
 DO			: 'do';
 DOT			: '.';
 ELSE: 'else';
-FOR: 'for';
 SAT: 'sat';
 DEFINEFUN: 'define-fun';
 DECLAREFUNVOID: 'declare_fun_void';

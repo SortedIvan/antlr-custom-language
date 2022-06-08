@@ -1,7 +1,6 @@
-string_var a = "ab"
-declare_fun_int DEBA() {a = "abc"} return a
-string_var c = DEBA()
+int_var a = 999
+int_var b = 3
+int_var c = 0
 
-int_var b = 2
-declare_fun_int DEBA1() {b = b + 2} return b
-int_var d = DEBA1()
+declare_fun_int DEBA() {c = a + b} return c
+declare_fun_int DEBA2() {int_var hello = DEBA() hello = hello + 1} return hello

@@ -65,8 +65,8 @@ class MyVisitor extends Example2BaseVisitor<Value>
 {
     Map<String, Value> storage = new HashMap<String, Value>();
     Map<String, Value> storageZ3 = new HashMap<String, Value>();
-    List<String> functions = new ArrayList<String>();
-    List<Example2Parser.DeclareFunctionContext> functions2 = new ArrayList<Example2Parser.DeclareFunctionContext>();
+    Map<String, Example2Parser.DeclareFunctionContext> functionStorage = new HashMap<>();
+
     // MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
     // is called when running the application
 	// (see Example2BaseVisitor.java: this Example2BaseVisitor.visitAndExpr() calls visitChildren())
@@ -454,6 +454,10 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return(Value.VOID);
     }
 
+    ///////////// FOR LOOP
+
+
+
     ///////////// PRINT Statement
 
 
@@ -468,24 +472,22 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     @Override
     public Value visitDeclareFunction(Example2Parser.DeclareFunctionContext ctx) {
-        functions.add(ctx.declareFunctions().ID().getText());
-        functions2.add(ctx);
+        functionStorage.put(ctx.declareFunctions().ID().getText(),ctx);
         return (Value.VOID);
     }
 
     @Override
     public Value visitCallFunctions(Example2Parser.CallFunctionsContext ctx) {
         Value result = null;
-        for (String name : functions) {
-            for (Example2Parser.DeclareFunctionContext contekst:functions2) {
-                if(name.equals(contekst.declareFunctions().ID().getText())){
-                    visit(contekst.declareFunctions().statement());
-                    result = visit(contekst.declareFunctions().expression(contekst.declareFunctions().expression().size()-1));
-                    System.err.println("[ return value: " + result + " ]");
-                }
+        for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
+            if(entry.getKey().equals(ctx.call_functions().ID().getText())){
+                visit(entry.getValue().declareFunctions().statement());
+                System.err.println(visit(entry.getValue().declareFunctions().expression(entry.getValue().declareFunctions().expression().size()-1)));
+                result = visit(entry.getValue().declareFunctions().expression(entry.getValue().declareFunctions().expression().size()-1));
+                System.err.println("[ return value: " + result + " ]");
             }
         }
-        return (result);
+        return result;
     }
 
     ///////////////////// Z3 SudokuA Week 3

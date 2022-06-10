@@ -4,8 +4,7 @@ grammar Example2;
 start2: statement* EOF;
 
 statement //statement
- :
- variable #assignVariable
+ :variable #assignVariable
  | print_statement #print
  | loop #loopStatement
  | ifStat #ifStatement
@@ -69,7 +68,7 @@ mathExpression: mathExpression op=MUL mathExpression # MUL
                | ID #ValueVariable
                ;
 
-declareFunctions: declare_body ID OPAR function_parameters CPAR statement RETURN expression
+declareFunctions: declare_body ID OPAR function_parameters* CPAR statement RETURN expression
                 ;
 
 declare_body: DECLAREFUNVOID    #declareFunVoid
@@ -78,7 +77,8 @@ declare_body: DECLAREFUNVOID    #declareFunVoid
             | DECLAREFUNBOOL    #declareFunBool
             ;
 
-call_functions: ID OPAR expression* CPAR
+call_functions: ID OPAR (expression)? CPAR
+                | ID OPAR expression (COMMA expression)* CPAR
                 ;
 
 parameter_variables: STRING_PARAM ID
@@ -86,7 +86,8 @@ parameter_variables: STRING_PARAM ID
                     | INT_PARAM ID
                     ;
 
-function_parameters: (parameter_variables*)
+function_parameters: parameter_variables
+                   | COMMA parameter_variables
 ;
 
 z3OutputSudokuA: SAT OPAR z3OutputSudokuA* CPAR #satBody

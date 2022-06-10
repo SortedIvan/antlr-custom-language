@@ -481,9 +481,9 @@ class MyVisitor extends Example2BaseVisitor<Value>
         Value result = null;
         for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
             if(entry.getKey().equals(ctx.call_functions().ID().getText())){
-                if(entry.getValue().declareFunctions().function_parameters().parameter_variables().size() !=0){
-                    storage.put(entry.getValue().declareFunctions().function_parameters().parameter_variables(0).ID().getText(),
-                            visit(ctx.call_functions().expression().get(0)));
+                for (int j = 0; j < entry.getValue().declareFunctions().function_parameters().size(); j++ ) {
+                    storage.put(entry.getValue().declareFunctions().function_parameters().get(j).parameter_variables().ID().getText(),
+                            visit(ctx.call_functions().expression().get(j)));
                 }
                 visit(entry.getValue().declareFunctions().statement());
                 System.err.println(visit(entry.getValue().declareFunctions().expression()));

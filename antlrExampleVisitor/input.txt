@@ -1,4 +1,6 @@
 int_var a = 0
-declare_fun_int DEBA(int_par b int_par d) {a = b + d} return a
+string_var ba = ""
+declare_fun_int DEBA(int_par b, int_par d,  int_par e, string_par ab) {a = b + d + e ba = ab} return ba
 
-int_var c = DEBA(3 4)
+int_var c = DEBA(1, 2, 3, "ab")
+print ba

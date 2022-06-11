@@ -66,6 +66,8 @@ class MyVisitor extends Example2BaseVisitor<Value>
     Map<String, Value> storage = new HashMap<String, Value>();
     Map<String, Value> storageZ3 = new HashMap<String, Value>();
     Map<String, Example2Parser.DeclareFunctionContext> functionStorage = new HashMap<>();
+    List<Example2Parser.ReturnStatement1Context> returnStorage = new ArrayList<>();
+
 
     // MyVisitor doesn't contain visitAndExpr(), so Example2BaseVisitor.visitAndExpr()
     // is called when running the application
@@ -280,7 +282,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
             return new Value(false);
         }
         else if(visit(ctx.mathExpression().get(0)).toString().equals(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
-            System.err.println("[true na kukuvo lqto]");
+            System.err.println("[true]");
             return new Value(true);
         }
         System.err.println("[not even close]");
@@ -430,14 +432,21 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     @Override
     public Value visitIfStatement(Example2Parser.IfStatementContext ctx) {
+        Value result = null;
         if (visit(ctx.ifStat().expression().getChild(0)).asBoolean()){
-            System.err.println("[in: " + ctx.ifStat().statement().get(0).getText() + "]"); visit(ctx.ifStat().statement().get(0));
+            System.err.println("[in: " + ctx.ifStat().statement().get(0).getText() + "]");
+
+            if (visit(ctx.ifStat().statement().get(0)) != null){
+                result = visit(ctx.ifStat().statement().get(0));
+            }
         }
         else if(ctx.ifStat().children.get(4).getText().equals("else")){
             System.err.println("[in: " + ctx.ifStat().statement().get(1).getText() + "]");
-            visit(ctx.ifStat().statement().get(1));
+            if (visit(ctx.ifStat().statement().get(1)) != null){
+                result = visit(ctx.ifStat().statement().get(1));
+            }
         }
-        return(Value.VOID);
+        return result;
     }
 
 
@@ -456,7 +465,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
 //    @Override
 //    public Value visitMultipleReturns(Example2Parser.MultipleReturnsContext ctx) {
-//        System.err.println("Hello" + ctx.expression().getText() + " ]");
+//
 //        return super.visitMultipleReturns(ctx);
 //    }
 
@@ -472,6 +481,14 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     /////////////////////Declare Integer Function
 
+
+    @Override
+    public Value visitReturnStatement1(Example2Parser.ReturnStatement1Context ctx) {
+        //System.err.println(visit(ctx.returnStatement()));
+        returnStorage.add(ctx);
+        return visit(ctx.returnStatement());
+    }
+
     @Override
     public Value visitDeclareFunction(Example2Parser.DeclareFunctionContext ctx) {
         functionStorage.put(ctx.declareFunctions().ID().getText(),ctx);
@@ -481,15 +498,19 @@ class MyVisitor extends Example2BaseVisitor<Value>
     @Override
     public Value visitCallFunctions(Example2Parser.CallFunctionsContext ctx) {
         Value result = null;
+        System.err.println("EBASI QKATA FUNKCIQ BRATLENCE");
         for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
             if(entry.getKey().equals(ctx.call_functions().ID().getText())){
+                System.err.println(entry.getValue().declareFunctions().statement().getText()  + " IIHIHIHII HIHI IHII HIIHI IIHIHII HIHII");
+                //System.err.println(entry.getValue().declareFunctions().);
+                System.err.println(entry.getValue().declareFunctions().returnStatement().getText());
                 for (int j = 0; j < entry.getValue().declareFunctions().function_parameters().size(); j++ ) {
                     storage.put(entry.getValue().declareFunctions().function_parameters().get(j).parameter_variables().ID().getText(),
                             visit(ctx.call_functions().expression().get(j)));
                 }
                 visit(entry.getValue().declareFunctions().statement());
-                System.err.println(visit(entry.getValue().declareFunctions().expression()));
-                result = visit(entry.getValue().declareFunctions().expression());
+                System.err.println(visit(entry.getValue().declareFunctions().returnStatement()));
+                result = visit(entry.getValue().declareFunctions().returnStatement());
                 System.err.println("[ return value: " + result + " ]");
             }
         }

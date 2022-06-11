@@ -66,12 +66,12 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclareFunction(Example2Parser.DeclareFunctionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code multipleReturns}
+	 * Visit a parse tree produced by the {@code returnStatement1}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMultipleReturns(Example2Parser.MultipleReturnsContext ctx);
+	T visitReturnStatement1(Example2Parser.ReturnStatement1Context ctx);
 	/**
 	 * Visit a parse tree produced by the {@code callFunctions}
 	 * labeled alternative in {@link Example2Parser#statement}.
@@ -119,6 +119,13 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValueString(Example2Parser.ValueStringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code returnStatementExpr}
+	 * labeled alternative in {@link Example2Parser#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatementExpr(Example2Parser.ReturnStatementExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#variable}.
 	 * @param ctx the parse tree

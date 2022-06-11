@@ -11,7 +11,7 @@ statement //statement
  | ifStat #ifStatement
  | LEFTCURL statement+ RIGHTCURL #statementBody
  | declareFunctions #declareFunction
- | RETURN expression #multipleReturns
+ | returnStatement #returnStatement1
  | call_functions #callFunctions
  ;
 
@@ -27,6 +27,9 @@ expression: mathExpression #MathExpr
            | BOOL   #ValueBool
            | STRING #ValueString
            ;
+
+returnStatement: RETURN expression #returnStatementExpr
+                ;
 
 variable : int_variable
          | bool_variable
@@ -65,7 +68,7 @@ mathExpression: mathExpression op=MUL mathExpression # MUL
                | ID #ValueVariable
                ;
 
-declareFunctions: declare_body ID OPAR function_parameters* CPAR statement RETURN expression
+declareFunctions: declare_body ID OPAR function_parameters* CPAR statement returnStatement
                 ;
 
 declare_body: DECLAREFUNVOID    #declareFunVoid

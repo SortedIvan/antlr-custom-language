@@ -4,24 +4,21 @@ grammar Example2;
 start2: statement* EOF;
 
 statement //statement
- :variable #assignVariable
+ : expression #expr
+ | variable #assignVariable
  | print_statement #print
  | loop #loopStatement
  | ifStat #ifStatement
- | url #urlStatement
  | LEFTCURL statement+ RIGHTCURL #statementBody
  | declareFunctions #declareFunction
- | call_functions #callFunctions
  | RETURN expression #multipleReturns
- | expression #expr
+ | call_functions #callFunctions
  ;
 
 loop		: WHILE expression DO statement;
 
 
 ifStat		: IF expression THEN LEFTCURL statement RIGHTCURL( ELSE statement )? FI;
-
-url			: numberA DOT numberB DOT numberC DOT numberD;
 
 print_statement: PRINT expression # printExpr ;
 
@@ -87,14 +84,12 @@ parameter_variables: STRING_PARAM ID
                     ;
 
 function_parameters: parameter_variables
-                   | COMMA parameter_variables
-;
+                   | COMMA parameter_variables;
+
+
+// Z3
 
 //bool_expression:
-numberA		: NUMBER;
-numberB		: NUMBER;
-numberC		: NUMBER;
-numberD		: NUMBER;
 
 LEFTCURL : '{';
 RIGHTCURL : '}';
@@ -146,6 +141,6 @@ COMMA		: ',';
 NUMBER     : [0-9]+ ;
 WS  : [ \t\r\n]+ -> skip;
 BOOL : 'true' | 'false';
-STRING : '"' (~["])+ '"';
 ID : [a-zA-Z_] [a-zA-Z_0-9]* ;
+STRING : '"' (~["])+ '"';
 

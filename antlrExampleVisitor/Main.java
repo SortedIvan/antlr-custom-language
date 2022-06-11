@@ -280,7 +280,7 @@ class MyVisitor extends Example2BaseVisitor<Value>
             return new Value(false);
         }
         else if(visit(ctx.mathExpression().get(0)).toString().equals(visit(ctx.mathExpression().get(1)).toString())){    // 1 == 1
-            System.err.println("[true]");
+            System.err.println("[true na kukuvo lqto]");
             return new Value(true);
         }
         System.err.println("[not even close]");
@@ -454,9 +454,11 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return(Value.VOID);
     }
 
-    ///////////// FOR LOOP
-
-
+//    @Override
+//    public Value visitMultipleReturns(Example2Parser.MultipleReturnsContext ctx) {
+//        System.err.println("Hello" + ctx.expression().getText() + " ]");
+//        return super.visitMultipleReturns(ctx);
+//    }
 
     ///////////// PRINT Statement
 
@@ -494,62 +496,6 @@ class MyVisitor extends Example2BaseVisitor<Value>
         return result;
     }
 
-    ///////////////////// Z3 Output
-
-    @Override
-    public Value visitZITEStatement(Example2Parser.ZITEStatementContext ctx) {
-        String first = ctx.z3expression().get(0).z3and().getChild(2).getText();
-        String second = ctx.z3expression().get(0).z3and().getChild(3).getText();
-        System.err.println(first.charAt(5));
-        System.err.println(second.charAt(5));
-        System.err.println(ctx.z3expression().size());
-//        System.err.println(" name1: " + ctx.z3expression().get(0).z3and().getChild(2).getText()+ " ");
-//        System.err.println(" name2: " + ctx.z3expression().get(0).z3and().children.get(3).getText() + " ");
-        System.err.println(" value: " + ctx.z3expression().get(1).getText() + " ");
-        Value value = visit(ctx.z3expression().get(1));
-
-        return (Value.VOID) ;
-    }
-
-//    @Override
-//    public Value visitZ3Output(Example2Parser.Z3OutputContext ctx) {
-//        storageZ3.clear();
-//        for (int j = 0; j < ctx.z3Statement().z3value().size(); j++){
-//            Value value = visit(ctx.z3Statement().z3value().get(j).getChild(6));
-//            storageZ3.put(ctx.z3Statement().z3value().get(j).getChild(2).getText(), value);
-//        }
-//        if(storageZ3.size() == 81){
-//            for (int i = 1; i <= 9; i++){
-//                if(i == 4 || i == 7){
-//                    System.err.println(" ---------------------");
-//                }
-//                for (int j = 1; j <= 9; j++) {
-//                    if(j == 3 || j == 6){
-//                        System.err.print(" " + storageZ3.get("a" + i + j) + " |");
-//                    }
-//                    else{
-//                        System.err.print(" " + storageZ3.get("a" + i + j) + "");
-//                    }
-//                }
-//                System.err.println();
-//            }
-//        }
-//        return (Value.VOID);
-//    }
-
-
-
-    @Override public Value visitUrl(Example2Parser.UrlContext ctx)
-    {
-        Value nA, nB, nC, nD;
-
-        nA = visit(ctx.numberD());
-        nB = visit(ctx.numberC());
-        nC = visit(ctx.numberB());
-        nD = visit(ctx.numberA());
-        System.err.println("URL: " + nA + "." + nB + "." + nC + "." + nD);
-        return (Value.VOID);
-    }
 
     @Override public Value visitTerminal(TerminalNode node)
     {

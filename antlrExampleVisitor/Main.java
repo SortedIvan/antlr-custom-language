@@ -484,9 +484,8 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     @Override
     public Value visitReturnStatement1(Example2Parser.ReturnStatement1Context ctx) {
-        //System.err.println(visit(ctx.returnStatement()));
-        returnStorage.add(ctx);
-        return visit(ctx.returnStatement());
+
+        return this.visit(ctx.returnStatement());
     }
 
     @Override
@@ -497,24 +496,62 @@ class MyVisitor extends Example2BaseVisitor<Value>
 
     @Override
     public Value visitCallFunctions(Example2Parser.CallFunctionsContext ctx) {
+        var function = functionStorage.get(ctx.call_functions().ID().getText());
+        List<Example2Parser.StatementContext> statements = function.declareFunctions().statement();
+        Map<String, Value> local = new HashMap<>();
+        for (var i = 0; i < function.declareFunctions().function_parameters().size(); i++) {
+            var variable = this.visit(ctx.call_functions().expression().get(i));
+            storage.put(function.declareFunctions().function_parameters().get(i).getText(), variable);
+        }
         Value result = null;
-        System.err.println("EBASI QKATA FUNKCIQ BRATLENCE");
-        for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
-            if(entry.getKey().equals(ctx.call_functions().ID().getText())){
-                System.err.println(entry.getValue().declareFunctions().statement().getText()  + " IIHIHIHII HIHI IHII HIIHI IIHIHII HIHII");
-                //System.err.println(entry.getValue().declareFunctions().);
-                System.err.println(entry.getValue().declareFunctions().returnStatement().getText());
-                for (int j = 0; j < entry.getValue().declareFunctions().function_parameters().size(); j++ ) {
-                    storage.put(entry.getValue().declareFunctions().function_parameters().get(j).parameter_variables().ID().getText(),
-                            visit(ctx.call_functions().expression().get(j)));
+
+        for (Example2Parser.StatementContext statement : statements) {
+            this.visit(statement);
+            for(int i = 0; i < statement.children.size(); i++) {
+                if (statement.children.get(i).getText().contains("return")) {
+                    if(visit(statement.children.get(i)) != null){
+                        result = visit(statement.children.get(i));
+                        break;
+                    }
                 }
-                visit(entry.getValue().declareFunctions().statement());
-                System.err.println(visit(entry.getValue().declareFunctions().returnStatement()));
-                result = visit(entry.getValue().declareFunctions().returnStatement());
-                System.err.println("[ return value: " + result + " ]");
             }
         }
+
         return result;
+
+
+
+
+//        Value result = null;
+//        System.err.println("EBASI QKATA FUNKCIQ BRATLENCE");
+//        for (Map.Entry<String, Example2Parser.DeclareFunctionContext> entry : functionStorage.entrySet()) {
+//            if(entry.getKey().equals(ctx.call_functions().ID().getText())){
+//                System.err.println("return stats " + entry.getValue().declareFunctions().statement().size());
+//                System.err.println("return stats " + entry.getValue().declareFunctions().statement().get(0).getText());
+//                List<Example2Parser.StatementContext> statements = entry.getValue().declareFunctions().statement();
+//
+//                for (int j = 0; j < entry.getValue().declareFunctions().function_parameters().size(); j++ ) {
+//                    storage.put(entry.getValue().declareFunctions().function_parameters().get(j).parameter_variables().ID().getText(),
+//                            visit(ctx.call_functions().expression().get(j)));
+//                }
+//                for (Example2Parser.StatementContext statement : statements) {
+//                    var s = this.visit(statement);
+//                    // If the statement is a return statement, set result to statement result, and break the function
+//                    System.err.println(statement.getText());
+//                }
+//                for(int i = 0; i < statements.size(); i++){
+//                    System.err.println(statements.get(i).getText());
+//
+//                }
+//
+////                visit(entry.getValue().declareFunctions().statement());
+////                System.err.println(visit(entry.getValue().declareFunctions().returnStatement()));
+//
+////                result = 0;
+//                System.err.println("[ return value: " + result + " ]");
+//            }
+//        }
+//        return result;
     }
 
 

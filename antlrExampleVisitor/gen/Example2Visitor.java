@@ -59,6 +59,13 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementBody(Example2Parser.StatementBodyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code callFunctions}
+	 * labeled alternative in {@link Example2Parser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallFunctions(Example2Parser.CallFunctionsContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code declareFunction}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
@@ -72,13 +79,6 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStatement1(Example2Parser.ReturnStatement1Context ctx);
-	/**
-	 * Visit a parse tree produced by the {@code callFunctions}
-	 * labeled alternative in {@link Example2Parser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCallFunctions(Example2Parser.CallFunctionsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#loop}.
 	 * @param ctx the parse tree

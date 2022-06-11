@@ -10,9 +10,10 @@ statement //statement
  | loop #loopStatement
  | ifStat #ifStatement
  | LEFTCURL statement+ RIGHTCURL #statementBody
+ | call_functions #callFunctions
  | declareFunctions #declareFunction
  | returnStatement #returnStatement1
- | call_functions #callFunctions
+
  ;
 
 loop		: WHILE expression DO statement;
@@ -68,7 +69,7 @@ mathExpression: mathExpression op=MUL mathExpression # MUL
                | ID #ValueVariable
                ;
 
-declareFunctions: declare_body ID OPAR function_parameters* CPAR statement returnStatement
+declareFunctions: declare_body ID OPAR function_parameters* CPAR statement+ ENDFUNCTION
                 ;
 
 declare_body: DECLAREFUNVOID    #declareFunVoid
@@ -122,6 +123,7 @@ PRINT: 'print';
 IF: 'if';
 FOR: 'for';
 FI			: 'fi';
+ENDFUNCTION: 'end';
 WHILE		: 'while';
 THEN		: 'then';
 DO			: 'do';

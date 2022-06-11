@@ -1,8 +1,9 @@
 declare_fun_int myFunction(){
-  if 3 > 2 then {return 1} fi
-  if 4 < 3 then {return 23} fi
-  int_var i = 0
-  i = i + 10
-} return i
+  int_var a = 3
+  int_var b = 4
+  if a == 3 then {return 4} fi
+  if a == 2 then {return 6} fi
+  return 5
+} end
 
-myFunction()
+int_var c = myFunction()

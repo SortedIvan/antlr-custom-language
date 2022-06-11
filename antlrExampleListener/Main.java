@@ -3,14 +3,15 @@ import gen.MyGrammarLexer;
 import gen.MyGrammarParser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+
+import java.lang.reflect.Array;
 import java.util.*;
 
 class MyListener extends MyGrammarBaseListener
 {
 	private final Stack<Integer> numberStack = new Stack<>();
-	Map<String, Integer> intVariables = new HashMap<String, Integer>();
-	Map<String, String> stringVariables = new HashMap<String, String>();
-	Map<String, Boolean> booleanVariables = new HashMap<String, Boolean>();
+	Map<String, String> storageZ3SudokuA = new HashMap<String, String>();
+	Map<Integer, String> storageZ3SudokuB = new HashMap<Integer, String>();
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
 	{ 
 		// TODO: investigate contents of 'ctx'
@@ -23,128 +24,83 @@ class MyListener extends MyGrammarBaseListener
 		System.err.println("exitMyStart()");
 	}
 	
-	@Override public void visitTerminal(TerminalNode node) 
-	{ 
-		System.err.println("terminal-node: '" + node.getText() + "'");
-		// TODO: print line+column, token's type, etc.
-	}
+//	@Override public void visitTerminal(TerminalNode node)
+//	{
+//		System.err.println("terminal-node: '" + node.getText() + "'");
+//		// TODO: print line+column, token's type, etc.
+//	}
 	// TODO: override other methods of 'MyGrammarBaseListener'
 
-	@Override
-	public void exitInt(MyGrammarParser.IntContext ctx) {
-		int i = Integer.parseInt(ctx.INT().getText());
-		numberStack.push(i);
-	}
 
 	@Override
-	public void exitOtherExpression(MyGrammarParser.OtherExpressionContext ctx) {
-		int result = numberStack.pop();
-		System.err.println("Final result is: " + result);
-	}
-
-	@Override
-	public void exitInitVarWithValue(MyGrammarParser.InitVarWithValueContext ctx) {
-		String varName = ctx.variable_name().getText();
-		Integer intValue = 0;
-		String stringValue ="";
-		Boolean boolValue = false;
-		if(ctx.variable_block().getText().equals("int_var")) {
-			intValue = Integer.parseInt(ctx.value_block().getText());
-			intVariables.put(varName, intValue);
-		}
-		else if(ctx.variable_block().getText().equals("string_var")) {
-			stringValue = ctx.value_block().getText();
-			stringVariables.put(varName, stringValue);
-		}
-		else if(ctx.variable_block().getText().equals("bool_var")) {
-			boolValue = Boolean.parseBoolean(ctx.value_block().getText());
-			booleanVariables.put(varName, boolValue);
-
-		}
-
-		System.out.println("value should be: " + ctx.value_block().getText());
-	}
-
-	@Override
-	public void exitPrintStatement(MyGrammarParser.PrintStatementContext ctx) {
-		if(intVariables.containsKey(ctx.print_stat().print_content().getText())){
-			System.out.println("printed: " + intVariables.get(ctx.print_stat().print_content().getText()));
-		}
-		else if(stringVariables.containsKey(ctx.print_stat().print_content().getText())){
-			System.out.println("printed: " + stringVariables.get(ctx.print_stat().print_content().getText()));
-		}
-		else if(booleanVariables.containsKey(ctx.print_stat().print_content().getText())){
-			System.out.println("printed: " + booleanVariables.get(ctx.print_stat().print_content().getText()));
-		}
-		else if(ctx.print_stat().print_content().getText().charAt(0) == '"'){
-			System.out.println("printed: " + ctx.print_stat().print_content().getText());
-		}
-		else{
-			System.out.println("printed: " + this.numberStack.pop());
-		}
-	}
-
-	@Override
-	public void exitAddSub(MyGrammarParser.AddSubContext ctx) {
-		int numOne = numberStack.pop();
-		int numTwo = numberStack.pop();
-
-		int result = 0;
-		if(ctx.op.getType() == MyGrammarParser.ADD){
-			result = numTwo + numOne;
-			System.err.println("Added "+numTwo + " with " +numOne + " = " + result);
-		}else{
-			result = numTwo - numOne;
-			System.err.println("Subtracted "+numTwo + " with " +numOne+ " = " + result);
-		}
-		numberStack.push(result);
-	}
-
-	@Override
-	public void exitMulDiv(MyGrammarParser.MulDivContext ctx){
-		int numOne = numberStack.pop();
-		int numTwo = numberStack.pop();
-		int result = 0;
-
-		if(ctx.op.getType() == MyGrammarParser.DIV){
-			if(numOne==0){
-				System.err.println("Cannot divide by 0");
-			}
-			else{
-				result = Math.round(numTwo / numOne);
-				System.err.println("Divided: " + numTwo + " with: " + numOne + " = " + " and rounded to: " + result);
+	public void exitZ3Statement(MyGrammarParser.Z3StatementContext ctx) {
+		if(ctx.z3value().size() == 81) { //SudokuA
+			for (int i = 0; i< 81; i++){
+				System.err.println("var name: '" + ctx.z3value(i).getChild(2).getText() + "'");
+				System.err.println("var value: '" + ctx.z3value(i).getChild(6).getText() + "'");
+				storageZ3SudokuA.put(ctx.z3value(i).getChild(2).getText(),
+						ctx.z3value(i).getChild(6).getText());
 			}
 		}
-		else{
-			result = numTwo * numOne;
-			System.err.println("Multiplied: " + numTwo + " with: " + numOne + " = " + " and rounded to: " + result);
-		}
-		numberStack.push(result);
-	}
+		else{	//SudokuB
+			//System.err.println("Sudoku B: '" + ctx.z3value().get(0).getText() + "'");
 
+		}
+        if(storageZ3SudokuA.size() == 81){
+            for (int i = 1; i <= 9; i++){
+                if(i == 4 || i == 7){
+                    System.err.println(" ---------------------");
+                }
+                for (int j = 1; j <= 9; j++) {
+                    if(j == 3 || j == 6){
+                        System.err.print(" " + storageZ3SudokuA.get("a" + i + j) + " |");
+                    }
+                    else{
+                        System.err.print(" " + storageZ3SudokuA.get("a" + i + j) + "");
+                    }
+                }
+                System.err.println();
+            }
+        }
+		super.exitZ3Statement(ctx);
+	}
 
 	@Override
-	public void exitPow(MyGrammarParser.PowContext ctx) {
-		int numOne = numberStack.pop();
-		int numTwo = numberStack.pop();
-
-		int result = 0;
-		result = (int) Math.pow(numTwo , numOne);
-		System.err.println(numTwo + " to the power of " +numOne + " = " + result);
-		numberStack.push(result);
-	}
-
-	@Override
-	public void exitFact(MyGrammarParser.FactContext ctx) {
-		int numOne = numberStack.pop();
-		int result = 1;
-		for (int factor = 2; factor <= numOne; factor++) {
-			result *= factor;
+	public void exitZITEStatement(MyGrammarParser.ZITEStatementContext ctx) {
+		char[] posit = ctx.z3expression(0).getText().toCharArray();
+		String position = "";
+		position = posit[16] + position;
+		position = posit[9] + position;
+		Integer deba = Integer.parseInt(position);
+		storageZ3SudokuB.put(deba, ctx.z3expression(1).getText());
+		if(storageZ3SudokuB.size() == 72){
+			for (int i = 10; i <= 90; i+=10){
+				if(i == 40 || i == 70){
+					System.err.println(" ---------------------");
+				}
+				for (int j = 1; j <= 9; j++) {
+					if(storageZ3SudokuB.containsKey(i+j)){
+						if(j == 3 || j == 6){
+							System.err.print(" " + storageZ3SudokuB.get(i + j) + " |");
+						}
+						else{
+							System.err.print(" " + storageZ3SudokuB.get(i + j) + "");
+						}
+					}
+					else{
+						if(j == 3 || j == 6){
+							System.err.print(" X |");
+						}
+						else{
+							System.err.print(" X");
+						}
+					}
+				}
+				System.err.println();
+			}
 		}
-		System.err.println(numOne + "! = " + result);
-		numberStack.push(result);
+		super.exitZITEStatement(ctx);
 	}
-
 
 }
 

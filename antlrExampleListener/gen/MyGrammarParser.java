@@ -18,19 +18,23 @@ public class MyGrammarParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		LEFTCURL=1, RIGHTCURL=2, OPAR=3, CPAR=4, MUL=5, DIV=6, ADD=7, SUB=8, POW=9, 
-		FACT=10, NOT=11, AND=12, OR=13, INT_INIT=14, STRING_INIT=15, BOOL_INIT=16, 
-		CHAR_INIT=17, PRINT=18, IF=19, ELSE=20, FOR=21, EQUAL=22, NEQUAL=23, EQUALCHECK=24, 
-		INT=25, WS=26, BOOL=27, STRING=28, IDENTIFIER=29;
+		FACT=10, NOT=11, AND=12, OR=13, BIGGERTHAN=14, SMALLERTHAN=15, BIGGEROREQUAL=16, 
+		SMALLEROREQUAL=17, INT_INIT=18, STRING_INIT=19, BOOL_INIT=20, CHAR_INIT=21, 
+		INT_PARAM=22, STRING_PARAM=23, BOOL_PARAM=24, PRINT=25, IF=26, FOR=27, 
+		FI=28, WHILE=29, THEN=30, DO=31, DOT=32, ELSE=33, DECLAREFUNVOID=34, DECLAREFUNSTRING=35, 
+		DECLAREFUNINT=36, DECLAREFUNBOOL=37, RETURN=38, SAT=39, DEFINEFUN=40, 
+		Z3INT=41, ITE=42, Z3AND=43, EQUAL=44, NEQUAL=45, EQUALCHECK=46, COMMA=47, 
+		NUMBER=48, WS=49, BOOL=50, STRING=51, ID=52;
 	public static final int
-		RULE_myStart = 0, RULE_block = 1, RULE_stat = 2, RULE_if_stat = 3, RULE_condition_block = 4, 
-		RULE_stat_block = 5, RULE_variable_stat = 6, RULE_variable_block = 7, 
-		RULE_variable_name = 8, RULE_print_stat = 9, RULE_print_content = 10, 
-		RULE_value_block = 11, RULE_expr = 12;
+		RULE_myStart = 0, RULE_statement = 1, RULE_z3Statement = 2, RULE_z3value = 3, 
+		RULE_z3and = 4, RULE_z3ite = 5, RULE_z3comparison = 6, RULE_z3variable_declaration = 7, 
+		RULE_z3variable_name = 8, RULE_z3expression = 9, RULE_numberA = 10, RULE_numberB = 11, 
+		RULE_numberC = 12, RULE_numberD = 13;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"myStart", "block", "stat", "if_stat", "condition_block", "stat_block", 
-			"variable_stat", "variable_block", "variable_name", "print_stat", "print_content", 
-			"value_block", "expr"
+			"myStart", "statement", "z3Statement", "z3value", "z3and", "z3ite", "z3comparison", 
+			"z3variable_declaration", "z3variable_name", "z3expression", "numberA", 
+			"numberB", "numberC", "numberD"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -38,17 +42,25 @@ public class MyGrammarParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'{'", "'}'", "'('", "')'", "'*'", "'/'", "'+'", "'-'", "'^'", 
-			"'!'", "'not'", "'&&'", "'||'", "'int_var'", "'string_var'", "'bool_var'", 
-			"'char_var'", "'print'", "'if'", "'else'", "'for'", "'='", "'!='", "'=='"
+			"'!'", "'not'", "'&&'", "'||'", "'>'", "'<'", "'>='", "'<='", "'int_var'", 
+			"'string_var'", "'bool_var'", "'char_var'", "'int_par'", "'string_par'", 
+			"'bool_par'", "'print'", "'if'", "'for'", "'fi'", "'while'", "'then'", 
+			"'do'", "'.'", "'else'", "'declare_fun_void'", "'declare_fun_string'", 
+			"'declare_fun_int'", "'declare_fun_bool'", "'return'", "'sat'", "'define-fun'", 
+			"'Int'", "'ite'", "'and'", "'='", "'!='", "'=='", "','"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, "LEFTCURL", "RIGHTCURL", "OPAR", "CPAR", "MUL", "DIV", "ADD", "SUB", 
-			"POW", "FACT", "NOT", "AND", "OR", "INT_INIT", "STRING_INIT", "BOOL_INIT", 
-			"CHAR_INIT", "PRINT", "IF", "ELSE", "FOR", "EQUAL", "NEQUAL", "EQUALCHECK", 
-			"INT", "WS", "BOOL", "STRING", "IDENTIFIER"
+			"POW", "FACT", "NOT", "AND", "OR", "BIGGERTHAN", "SMALLERTHAN", "BIGGEROREQUAL", 
+			"SMALLEROREQUAL", "INT_INIT", "STRING_INIT", "BOOL_INIT", "CHAR_INIT", 
+			"INT_PARAM", "STRING_PARAM", "BOOL_PARAM", "PRINT", "IF", "FOR", "FI", 
+			"WHILE", "THEN", "DO", "DOT", "ELSE", "DECLAREFUNVOID", "DECLAREFUNSTRING", 
+			"DECLAREFUNINT", "DECLAREFUNBOOL", "RETURN", "SAT", "DEFINEFUN", "Z3INT", 
+			"ITE", "Z3AND", "EQUAL", "NEQUAL", "EQUALCHECK", "COMMA", "NUMBER", "WS", 
+			"BOOL", "STRING", "ID"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -104,11 +116,11 @@ public class MyGrammarParser extends Parser {
 
 	public static class MyStartContext extends ParserRuleContext {
 		public TerminalNode EOF() { return getToken(MyGrammarParser.EOF, 0); }
-		public List<BlockContext> block() {
-			return getRuleContexts(BlockContext.class);
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
 		}
-		public BlockContext block(int i) {
-			return getRuleContext(BlockContext.class,i);
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
 		}
 		public MyStartContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -131,21 +143,21 @@ public class MyGrammarParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(27); 
+			setState(29); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(26);
-				block();
+				setState(28);
+				statement();
 				}
 				}
-				setState(29); 
+				setState(31); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << NOT) | (1L << INT_INIT) | (1L << STRING_INIT) | (1L << BOOL_INIT) | (1L << CHAR_INIT) | (1L << PRINT) | (1L << IF) | (1L << ELSE) | (1L << EQUALCHECK) | (1L << INT) | (1L << BOOL) | (1L << STRING) | (1L << IDENTIFIER))) != 0) );
-			setState(31);
+			} while ( _la==SAT );
+			setState(33);
 			match(EOF);
 			}
 		}
@@ -160,35 +172,35 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class BlockContext extends ParserRuleContext {
-		public List<StatContext> stat() {
-			return getRuleContexts(StatContext.class);
+	public static class StatementContext extends ParserRuleContext {
+		public List<Z3StatementContext> z3Statement() {
+			return getRuleContexts(Z3StatementContext.class);
 		}
-		public StatContext stat(int i) {
-			return getRuleContext(StatContext.class,i);
+		public Z3StatementContext z3Statement(int i) {
+			return getRuleContext(Z3StatementContext.class,i);
 		}
-		public BlockContext(ParserRuleContext parent, int invokingState) {
+		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_block; }
+		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterBlock(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitBlock(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitStatement(this);
 		}
 	}
 
-	public final BlockContext block() throws RecognitionException {
-		BlockContext _localctx = new BlockContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_block);
+	public final StatementContext statement() throws RecognitionException {
+		StatementContext _localctx = new StatementContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_statement);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(34); 
+			setState(36); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -196,15 +208,15 @@ public class MyGrammarParser extends Parser {
 				case 1:
 					{
 					{
-					setState(33);
-					stat();
+					setState(35);
+					z3Statement();
 					}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(36); 
+				setState(38); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,1,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -221,113 +233,57 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class StatContext extends ParserRuleContext {
-		public StatContext(ParserRuleContext parent, int invokingState) {
+	public static class Z3StatementContext extends ParserRuleContext {
+		public TerminalNode SAT() { return getToken(MyGrammarParser.SAT, 0); }
+		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
+		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
+		public List<Z3valueContext> z3value() {
+			return getRuleContexts(Z3valueContext.class);
+		}
+		public Z3valueContext z3value(int i) {
+			return getRuleContext(Z3valueContext.class,i);
+		}
+		public Z3StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_stat; }
-	 
-		public StatContext() { }
-		public void copyFrom(StatContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class VariableStatementContext extends StatContext {
-		public Variable_statContext variable_stat() {
-			return getRuleContext(Variable_statContext.class,0);
-		}
-		public VariableStatementContext(StatContext ctx) { copyFrom(ctx); }
+		@Override public int getRuleIndex() { return RULE_z3Statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterVariableStatement(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZ3Statement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitVariableStatement(this);
-		}
-	}
-	public static class OtherExpressionContext extends StatContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public OtherExpressionContext(StatContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterOtherExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitOtherExpression(this);
-		}
-	}
-	public static class PrintStatementContext extends StatContext {
-		public Print_statContext print_stat() {
-			return getRuleContext(Print_statContext.class,0);
-		}
-		public PrintStatementContext(StatContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterPrintStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitPrintStatement(this);
-		}
-	}
-	public static class IfStatementContext extends StatContext {
-		public If_statContext if_stat() {
-			return getRuleContext(If_statContext.class,0);
-		}
-		public IfStatementContext(StatContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIfStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIfStatement(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZ3Statement(this);
 		}
 	}
 
-	public final StatContext stat() throws RecognitionException {
-		StatContext _localctx = new StatContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_stat);
+	public final Z3StatementContext z3Statement() throws RecognitionException {
+		Z3StatementContext _localctx = new Z3StatementContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_z3Statement);
+		int _la;
 		try {
-			setState(42);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(40);
+			match(SAT);
+			setState(41);
+			match(OPAR);
+			setState(43); 
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-			case 1:
-				_localctx = new IfStatementContext(_localctx);
-				enterOuterAlt(_localctx, 1);
+			_la = _input.LA(1);
+			do {
 				{
-				setState(38);
-				if_stat();
-				}
-				break;
-			case 2:
-				_localctx = new VariableStatementContext(_localctx);
-				enterOuterAlt(_localctx, 2);
 				{
-				setState(39);
-				variable_stat();
+				setState(42);
+				z3value();
 				}
-				break;
-			case 3:
-				_localctx = new PrintStatementContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(40);
-				print_stat();
 				}
-				break;
-			case 4:
-				_localctx = new OtherExpressionContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(41);
-				expr(0);
-				}
-				break;
+				setState(45); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( _la==OPAR );
+			setState(47);
+			match(CPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -341,81 +297,104 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class If_statContext extends ParserRuleContext {
-		public List<TerminalNode> IF() { return getTokens(MyGrammarParser.IF); }
-		public TerminalNode IF(int i) {
-			return getToken(MyGrammarParser.IF, i);
-		}
-		public List<Condition_blockContext> condition_block() {
-			return getRuleContexts(Condition_blockContext.class);
-		}
-		public Condition_blockContext condition_block(int i) {
-			return getRuleContext(Condition_blockContext.class,i);
-		}
-		public List<TerminalNode> ELSE() { return getTokens(MyGrammarParser.ELSE); }
-		public TerminalNode ELSE(int i) {
-			return getToken(MyGrammarParser.ELSE, i);
-		}
-		public Stat_blockContext stat_block() {
-			return getRuleContext(Stat_blockContext.class,0);
-		}
-		public If_statContext(ParserRuleContext parent, int invokingState) {
+	public static class Z3valueContext extends ParserRuleContext {
+		public Z3valueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_if_stat; }
+		@Override public int getRuleIndex() { return RULE_z3value; }
+	 
+		public Z3valueContext() { }
+		public void copyFrom(Z3valueContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ZValueContext extends Z3valueContext {
+		public List<TerminalNode> OPAR() { return getTokens(MyGrammarParser.OPAR); }
+		public TerminalNode OPAR(int i) {
+			return getToken(MyGrammarParser.OPAR, i);
+		}
+		public TerminalNode DEFINEFUN() { return getToken(MyGrammarParser.DEFINEFUN, 0); }
+		public Z3variable_nameContext z3variable_name() {
+			return getRuleContext(Z3variable_nameContext.class,0);
+		}
+		public List<TerminalNode> CPAR() { return getTokens(MyGrammarParser.CPAR); }
+		public TerminalNode CPAR(int i) {
+			return getToken(MyGrammarParser.CPAR, i);
+		}
+		public TerminalNode Z3INT() { return getToken(MyGrammarParser.Z3INT, 0); }
+		public List<Z3variable_declarationContext> z3variable_declaration() {
+			return getRuleContexts(Z3variable_declarationContext.class);
+		}
+		public Z3variable_declarationContext z3variable_declaration(int i) {
+			return getRuleContext(Z3variable_declarationContext.class,i);
+		}
+		public List<Z3expressionContext> z3expression() {
+			return getRuleContexts(Z3expressionContext.class);
+		}
+		public Z3expressionContext z3expression(int i) {
+			return getRuleContext(Z3expressionContext.class,i);
+		}
+		public ZValueContext(Z3valueContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIf_stat(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZValue(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIf_stat(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZValue(this);
 		}
 	}
 
-	public final If_statContext if_stat() throws RecognitionException {
-		If_statContext _localctx = new If_statContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_if_stat);
+	public final Z3valueContext z3value() throws RecognitionException {
+		Z3valueContext _localctx = new Z3valueContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_z3value);
+		int _la;
 		try {
-			int _alt;
+			_localctx = new ZValueContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(44);
-			match(IF);
-			setState(45);
-			condition_block();
+			setState(49);
+			match(OPAR);
+			setState(50);
+			match(DEFINEFUN);
 			setState(51);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					setState(46);
-					match(ELSE);
-					setState(47);
-					match(IF);
-					setState(48);
-					condition_block();
-					}
-					} 
-				}
-				setState(53);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
-			}
+			z3variable_name();
+			setState(52);
+			match(OPAR);
 			setState(56);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
-			case 1:
+			_la = _input.LA(1);
+			while (_la==OPAR) {
 				{
-				setState(54);
-				match(ELSE);
-				setState(55);
-				stat_block();
+				{
+				setState(53);
+				z3variable_declaration();
 				}
-				break;
+				}
+				setState(58);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
 			}
+			setState(59);
+			match(CPAR);
+			setState(60);
+			match(Z3INT);
+			setState(64);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << NUMBER) | (1L << ID))) != 0)) {
+				{
+				{
+				setState(61);
+				z3expression();
+				}
+				}
+				setState(66);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(67);
+			match(CPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -429,283 +408,66 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Condition_blockContext extends ParserRuleContext {
-		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
-		public Stat_blockContext stat_block() {
-			return getRuleContext(Stat_blockContext.class,0);
-		}
-		public Condition_blockContext(ParserRuleContext parent, int invokingState) {
+	public static class Z3andContext extends ParserRuleContext {
+		public Z3andContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_condition_block; }
+		@Override public int getRuleIndex() { return RULE_z3and; }
+	 
+		public Z3andContext() { }
+		public void copyFrom(Z3andContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ZAndStatementContext extends Z3andContext {
+		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
+		public TerminalNode Z3AND() { return getToken(MyGrammarParser.Z3AND, 0); }
+		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
+		public List<Z3expressionContext> z3expression() {
+			return getRuleContexts(Z3expressionContext.class);
+		}
+		public Z3expressionContext z3expression(int i) {
+			return getRuleContext(Z3expressionContext.class,i);
+		}
+		public ZAndStatementContext(Z3andContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterCondition_block(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZAndStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitCondition_block(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZAndStatement(this);
 		}
 	}
 
-	public final Condition_blockContext condition_block() throws RecognitionException {
-		Condition_blockContext _localctx = new Condition_blockContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_condition_block);
+	public final Z3andContext z3and() throws RecognitionException {
+		Z3andContext _localctx = new Z3andContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_z3and);
+		int _la;
 		try {
+			_localctx = new ZAndStatementContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58);
+			setState(69);
 			match(OPAR);
-			setState(59);
-			expr(0);
-			setState(60);
-			match(CPAR);
-			setState(61);
-			stat_block();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Stat_blockContext extends ParserRuleContext {
-		public TerminalNode LEFTCURL() { return getToken(MyGrammarParser.LEFTCURL, 0); }
-		public BlockContext block() {
-			return getRuleContext(BlockContext.class,0);
-		}
-		public TerminalNode RIGHTCURL() { return getToken(MyGrammarParser.RIGHTCURL, 0); }
-		public StatContext stat() {
-			return getRuleContext(StatContext.class,0);
-		}
-		public Stat_blockContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_stat_block; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterStat_block(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitStat_block(this);
-		}
-	}
-
-	public final Stat_blockContext stat_block() throws RecognitionException {
-		Stat_blockContext _localctx = new Stat_blockContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_stat_block);
-		try {
-			setState(68);
+			setState(70);
+			match(Z3AND);
+			setState(72); 
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case LEFTCURL:
-				enterOuterAlt(_localctx, 1);
+			_la = _input.LA(1);
+			do {
 				{
-				setState(63);
-				match(LEFTCURL);
-				setState(64);
-				block();
-				setState(65);
-				match(RIGHTCURL);
-				}
-				break;
-			case OPAR:
-			case NOT:
-			case INT_INIT:
-			case STRING_INIT:
-			case BOOL_INIT:
-			case CHAR_INIT:
-			case PRINT:
-			case IF:
-			case ELSE:
-			case EQUALCHECK:
-			case INT:
-			case BOOL:
-			case STRING:
-			case IDENTIFIER:
-				enterOuterAlt(_localctx, 2);
 				{
-				setState(67);
-				stat();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Variable_statContext extends ParserRuleContext {
-		public Variable_statContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_variable_stat; }
-	 
-		public Variable_statContext() { }
-		public void copyFrom(Variable_statContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class InitVarToVarContext extends Variable_statContext {
-		public Variable_blockContext variable_block() {
-			return getRuleContext(Variable_blockContext.class,0);
-		}
-		public Variable_nameContext variable_name() {
-			return getRuleContext(Variable_nameContext.class,0);
-		}
-		public TerminalNode EQUAL() { return getToken(MyGrammarParser.EQUAL, 0); }
-		public Variable_statContext variable_stat() {
-			return getRuleContext(Variable_statContext.class,0);
-		}
-		public InitVarToVarContext(Variable_statContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterInitVarToVar(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitInitVarToVar(this);
-		}
-	}
-	public static class InitVarContext extends Variable_statContext {
-		public Variable_blockContext variable_block() {
-			return getRuleContext(Variable_blockContext.class,0);
-		}
-		public Variable_nameContext variable_name() {
-			return getRuleContext(Variable_nameContext.class,0);
-		}
-		public InitVarContext(Variable_statContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterInitVar(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitInitVar(this);
-		}
-	}
-	public static class InitVarWithValueContext extends Variable_statContext {
-		public Variable_blockContext variable_block() {
-			return getRuleContext(Variable_blockContext.class,0);
-		}
-		public Variable_nameContext variable_name() {
-			return getRuleContext(Variable_nameContext.class,0);
-		}
-		public TerminalNode EQUAL() { return getToken(MyGrammarParser.EQUAL, 0); }
-		public Value_blockContext value_block() {
-			return getRuleContext(Value_blockContext.class,0);
-		}
-		public InitVarWithValueContext(Variable_statContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterInitVarWithValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitInitVarWithValue(this);
-		}
-	}
-	public static class InitVarWithStatementValueContext extends Variable_statContext {
-		public Variable_blockContext variable_block() {
-			return getRuleContext(Variable_blockContext.class,0);
-		}
-		public Variable_nameContext variable_name() {
-			return getRuleContext(Variable_nameContext.class,0);
-		}
-		public TerminalNode EQUAL() { return getToken(MyGrammarParser.EQUAL, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public InitVarWithStatementValueContext(Variable_statContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterInitVarWithStatementValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitInitVarWithStatementValue(this);
-		}
-	}
-
-	public final Variable_statContext variable_stat() throws RecognitionException {
-		Variable_statContext _localctx = new Variable_statContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_variable_stat);
-		try {
-			setState(88);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-			case 1:
-				_localctx = new InitVarContext(_localctx);
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(70);
-				variable_block();
 				setState(71);
-				variable_name();
+				z3expression();
 				}
-				break;
-			case 2:
-				_localctx = new InitVarWithValueContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(73);
-				variable_block();
-				setState(74);
-				variable_name();
-				setState(75);
-				match(EQUAL);
-				setState(76);
-				value_block();
 				}
-				break;
-			case 3:
-				_localctx = new InitVarWithStatementValueContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(78);
-				variable_block();
-				setState(79);
-				variable_name();
-				setState(80);
-				match(EQUAL);
-				setState(81);
-				expr(0);
-				}
-				break;
-			case 4:
-				_localctx = new InitVarToVarContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(83);
-				variable_block();
-				setState(84);
-				variable_name();
-				setState(85);
-				match(EQUAL);
-				setState(86);
-				variable_stat();
-				}
-				break;
+				setState(74); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << OPAR) | (1L << NUMBER) | (1L << ID))) != 0) );
+			setState(76);
+			match(CPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -719,107 +481,133 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Variable_blockContext extends ParserRuleContext {
-		public Variable_blockContext(ParserRuleContext parent, int invokingState) {
+	public static class Z3iteContext extends ParserRuleContext {
+		public Z3iteContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_variable_block; }
+		@Override public int getRuleIndex() { return RULE_z3ite; }
 	 
-		public Variable_blockContext() { }
-		public void copyFrom(Variable_blockContext ctx) {
+		public Z3iteContext() { }
+		public void copyFrom(Z3iteContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class StringVariableContext extends Variable_blockContext {
-		public TerminalNode STRING_INIT() { return getToken(MyGrammarParser.STRING_INIT, 0); }
-		public StringVariableContext(Variable_blockContext ctx) { copyFrom(ctx); }
+	public static class ZITEStatementContext extends Z3iteContext {
+		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
+		public TerminalNode ITE() { return getToken(MyGrammarParser.ITE, 0); }
+		public List<Z3expressionContext> z3expression() {
+			return getRuleContexts(Z3expressionContext.class);
+		}
+		public Z3expressionContext z3expression(int i) {
+			return getRuleContext(Z3expressionContext.class,i);
+		}
+		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
+		public ZITEStatementContext(Z3iteContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterStringVariable(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZITEStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitStringVariable(this);
-		}
-	}
-	public static class BoolVariableContext extends Variable_blockContext {
-		public TerminalNode BOOL_INIT() { return getToken(MyGrammarParser.BOOL_INIT, 0); }
-		public BoolVariableContext(Variable_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterBoolVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitBoolVariable(this);
-		}
-	}
-	public static class IntVariableContext extends Variable_blockContext {
-		public TerminalNode INT_INIT() { return getToken(MyGrammarParser.INT_INIT, 0); }
-		public IntVariableContext(Variable_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIntVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIntVariable(this);
-		}
-	}
-	public static class CharVariableContext extends Variable_blockContext {
-		public TerminalNode CHAR_INIT() { return getToken(MyGrammarParser.CHAR_INIT, 0); }
-		public CharVariableContext(Variable_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterCharVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitCharVariable(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZITEStatement(this);
 		}
 	}
 
-	public final Variable_blockContext variable_block() throws RecognitionException {
-		Variable_blockContext _localctx = new Variable_blockContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_variable_block);
+	public final Z3iteContext z3ite() throws RecognitionException {
+		Z3iteContext _localctx = new Z3iteContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_z3ite);
 		try {
-			setState(94);
+			_localctx = new ZITEStatementContext(_localctx);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(78);
+			match(OPAR);
+			setState(79);
+			match(ITE);
+			setState(80);
+			z3expression();
+			setState(81);
+			z3expression();
+			setState(82);
+			z3expression();
+			setState(83);
+			match(CPAR);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class Z3comparisonContext extends ParserRuleContext {
+		public Z3comparisonContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_z3comparison; }
+	 
+		public Z3comparisonContext() { }
+		public void copyFrom(Z3comparisonContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class ZcomparisonStatementContext extends Z3comparisonContext {
+		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
+		public TerminalNode EQUAL() { return getToken(MyGrammarParser.EQUAL, 0); }
+		public Z3variable_nameContext z3variable_name() {
+			return getRuleContext(Z3variable_nameContext.class,0);
+		}
+		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
+		public List<TerminalNode> NUMBER() { return getTokens(MyGrammarParser.NUMBER); }
+		public TerminalNode NUMBER(int i) {
+			return getToken(MyGrammarParser.NUMBER, i);
+		}
+		public ZcomparisonStatementContext(Z3comparisonContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZcomparisonStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZcomparisonStatement(this);
+		}
+	}
+
+	public final Z3comparisonContext z3comparison() throws RecognitionException {
+		Z3comparisonContext _localctx = new Z3comparisonContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_z3comparison);
+		int _la;
+		try {
+			_localctx = new ZcomparisonStatementContext(_localctx);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(85);
+			match(OPAR);
+			setState(86);
+			match(EQUAL);
+			setState(87);
+			z3variable_name();
+			setState(91);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case BOOL_INIT:
-				_localctx = new BoolVariableContext(_localctx);
-				enterOuterAlt(_localctx, 1);
+			_la = _input.LA(1);
+			while (_la==NUMBER) {
 				{
-				setState(90);
-				match(BOOL_INIT);
+				{
+				setState(88);
+				match(NUMBER);
 				}
-				break;
-			case STRING_INIT:
-				_localctx = new StringVariableContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(91);
-				match(STRING_INIT);
 				}
-				break;
-			case INT_INIT:
-				_localctx = new IntVariableContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(92);
-				match(INT_INIT);
-				}
-				break;
-			case CHAR_INIT:
-				_localctx = new CharVariableContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
 				setState(93);
-				match(CHAR_INIT);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(94);
+			match(CPAR);
 			}
 		}
 		catch (RecognitionException re) {
@@ -833,86 +621,49 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Variable_nameContext extends ParserRuleContext {
-		public Variable_nameContext(ParserRuleContext parent, int invokingState) {
+	public static class Z3variable_declarationContext extends ParserRuleContext {
+		public Z3variable_declarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_variable_name; }
+		@Override public int getRuleIndex() { return RULE_z3variable_declaration; }
 	 
-		public Variable_nameContext() { }
-		public void copyFrom(Variable_nameContext ctx) {
+		public Z3variable_declarationContext() { }
+		public void copyFrom(Z3variable_declarationContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class VariableNameContext extends Variable_nameContext {
-		public TerminalNode IDENTIFIER() { return getToken(MyGrammarParser.IDENTIFIER, 0); }
-		public VariableNameContext(Variable_nameContext ctx) { copyFrom(ctx); }
+	public static class ZvariableDeclarationContext extends Z3variable_declarationContext {
+		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
+		public Z3variable_nameContext z3variable_name() {
+			return getRuleContext(Z3variable_nameContext.class,0);
+		}
+		public TerminalNode Z3INT() { return getToken(MyGrammarParser.Z3INT, 0); }
+		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
+		public ZvariableDeclarationContext(Z3variable_declarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterVariableName(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZvariableDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitVariableName(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZvariableDeclaration(this);
 		}
 	}
 
-	public final Variable_nameContext variable_name() throws RecognitionException {
-		Variable_nameContext _localctx = new Variable_nameContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_variable_name);
+	public final Z3variable_declarationContext z3variable_declaration() throws RecognitionException {
+		Z3variable_declarationContext _localctx = new Z3variable_declarationContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_z3variable_declaration);
 		try {
-			_localctx = new VariableNameContext(_localctx);
+			_localctx = new ZvariableDeclarationContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(96);
-			match(IDENTIFIER);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Print_statContext extends ParserRuleContext {
-		public TerminalNode PRINT() { return getToken(MyGrammarParser.PRINT, 0); }
-		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
-		public Print_contentContext print_content() {
-			return getRuleContext(Print_contentContext.class,0);
-		}
-		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
-		public Print_statContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_print_stat; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterPrint_stat(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitPrint_stat(this);
-		}
-	}
-
-	public final Print_statContext print_stat() throws RecognitionException {
-		Print_statContext _localctx = new Print_statContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_print_stat);
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(98);
-			match(PRINT);
-			setState(99);
 			match(OPAR);
-			setState(100);
-			print_content();
-			setState(101);
+			setState(97);
+			z3variable_name();
+			setState(98);
+			match(Z3INT);
+			setState(99);
 			match(CPAR);
 			}
 		}
@@ -927,735 +678,87 @@ public class MyGrammarParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Print_contentContext extends ParserRuleContext {
-		public Print_contentContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_print_content; }
-	 
-		public Print_contentContext() { }
-		public void copyFrom(Print_contentContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class PrintVariableContext extends Print_contentContext {
-		public Variable_statContext variable_stat() {
-			return getRuleContext(Variable_statContext.class,0);
-		}
-		public PrintVariableContext(Print_contentContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterPrintVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitPrintVariable(this);
-		}
-	}
-	public static class PrintExprContext extends Print_contentContext {
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public PrintExprContext(Print_contentContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterPrintExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitPrintExpr(this);
-		}
-	}
-
-	public final Print_contentContext print_content() throws RecognitionException {
-		Print_contentContext _localctx = new Print_contentContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_print_content);
-		try {
-			setState(105);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-			case 1:
-				_localctx = new PrintExprContext(_localctx);
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(103);
-				expr(0);
-				}
-				break;
-			case 2:
-				_localctx = new PrintVariableContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(104);
-				variable_stat();
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class Value_blockContext extends ParserRuleContext {
-		public Value_blockContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_value_block; }
-	 
-		public Value_blockContext() { }
-		public void copyFrom(Value_blockContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class StringValueContext extends Value_blockContext {
-		public TerminalNode STRING() { return getToken(MyGrammarParser.STRING, 0); }
-		public StringValueContext(Value_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterStringValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitStringValue(this);
-		}
-	}
-	public static class OtherVariableContext extends Value_blockContext {
-		public TerminalNode IDENTIFIER() { return getToken(MyGrammarParser.IDENTIFIER, 0); }
-		public OtherVariableContext(Value_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterOtherVariable(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitOtherVariable(this);
-		}
-	}
-	public static class IntValueContext extends Value_blockContext {
-		public TerminalNode INT() { return getToken(MyGrammarParser.INT, 0); }
-		public IntValueContext(Value_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIntValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIntValue(this);
-		}
-	}
-	public static class BooleanValueContext extends Value_blockContext {
-		public TerminalNode BOOL() { return getToken(MyGrammarParser.BOOL, 0); }
-		public BooleanValueContext(Value_blockContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterBooleanValue(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitBooleanValue(this);
-		}
-	}
-
-	public final Value_blockContext value_block() throws RecognitionException {
-		Value_blockContext _localctx = new Value_blockContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_value_block);
-		try {
-			setState(111);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case INT:
-				_localctx = new IntValueContext(_localctx);
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(107);
-				match(INT);
-				}
-				break;
-			case STRING:
-				_localctx = new StringValueContext(_localctx);
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(108);
-				match(STRING);
-				}
-				break;
-			case BOOL:
-				_localctx = new BooleanValueContext(_localctx);
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(109);
-				match(BOOL);
-				}
-				break;
-			case IDENTIFIER:
-				_localctx = new OtherVariableContext(_localctx);
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(110);
-				match(IDENTIFIER);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class ExprContext extends ParserRuleContext {
-		public ExprContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expr; }
-	 
-		public ExprContext() { }
-		public void copyFrom(ExprContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class IdentifierContext extends ExprContext {
-		public TerminalNode IDENTIFIER() { return getToken(MyGrammarParser.IDENTIFIER, 0); }
-		public IdentifierContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIdentifier(this);
-		}
-	}
-	public static class ParensContext extends ExprContext {
-		public TerminalNode OPAR() { return getToken(MyGrammarParser.OPAR, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public TerminalNode CPAR() { return getToken(MyGrammarParser.CPAR, 0); }
-		public ParensContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterParens(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitParens(this);
-		}
-	}
-	public static class OrContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode OR() { return getToken(MyGrammarParser.OR, 0); }
-		public OrContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterOr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitOr(this);
-		}
-	}
-	public static class BoolContext extends ExprContext {
-		public TerminalNode BOOL() { return getToken(MyGrammarParser.BOOL, 0); }
-		public BoolContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterBool(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitBool(this);
-		}
-	}
-	public static class StringContext extends ExprContext {
-		public TerminalNode STRING() { return getToken(MyGrammarParser.STRING, 0); }
-		public StringContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterString(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitString(this);
-		}
-	}
-	public static class MulDivContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode MUL() { return getToken(MyGrammarParser.MUL, 0); }
-		public TerminalNode DIV() { return getToken(MyGrammarParser.DIV, 0); }
-		public MulDivContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterMulDiv(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitMulDiv(this);
-		}
-	}
-	public static class AddSubContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode ADD() { return getToken(MyGrammarParser.ADD, 0); }
-		public TerminalNode SUB() { return getToken(MyGrammarParser.SUB, 0); }
-		public AddSubContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterAddSub(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitAddSub(this);
-		}
-	}
-	public static class FactContext extends ExprContext {
-		public Token op;
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
+	public static class Z3variable_nameContext extends ParserRuleContext {
 		public TerminalNode FACT() { return getToken(MyGrammarParser.FACT, 0); }
-		public FactContext(ExprContext ctx) { copyFrom(ctx); }
+		public List<TerminalNode> ID() { return getTokens(MyGrammarParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(MyGrammarParser.ID, i);
+		}
+		public List<TerminalNode> NUMBER() { return getTokens(MyGrammarParser.NUMBER); }
+		public TerminalNode NUMBER(int i) {
+			return getToken(MyGrammarParser.NUMBER, i);
+		}
+		public Z3variable_nameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_z3variable_name; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterFact(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZ3variable_name(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitFact(this);
-		}
-	}
-	public static class IntContext extends ExprContext {
-		public TerminalNode INT() { return getToken(MyGrammarParser.INT, 0); }
-		public IntContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterInt(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitInt(this);
-		}
-	}
-	public static class NotContext extends ExprContext {
-		public TerminalNode NOT() { return getToken(MyGrammarParser.NOT, 0); }
-		public ExprContext expr() {
-			return getRuleContext(ExprContext.class,0);
-		}
-		public NotContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterNot(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitNot(this);
-		}
-	}
-	public static class ElseContext extends ExprContext {
-		public TerminalNode ELSE() { return getToken(MyGrammarParser.ELSE, 0); }
-		public ElseContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterElse(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitElse(this);
-		}
-	}
-	public static class StringInitContext extends ExprContext {
-		public TerminalNode STRING_INIT() { return getToken(MyGrammarParser.STRING_INIT, 0); }
-		public StringInitContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterStringInit(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitStringInit(this);
-		}
-	}
-	public static class AndContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode AND() { return getToken(MyGrammarParser.AND, 0); }
-		public AndContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterAnd(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitAnd(this);
-		}
-	}
-	public static class EqualcheckContext extends ExprContext {
-		public TerminalNode EQUALCHECK() { return getToken(MyGrammarParser.EQUALCHECK, 0); }
-		public EqualcheckContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterEqualcheck(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitEqualcheck(this);
-		}
-	}
-	public static class IntInitContext extends ExprContext {
-		public TerminalNode INT_INIT() { return getToken(MyGrammarParser.INT_INIT, 0); }
-		public IntInitContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIntInit(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIntInit(this);
-		}
-	}
-	public static class PowContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode POW() { return getToken(MyGrammarParser.POW, 0); }
-		public PowContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterPow(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitPow(this);
-		}
-	}
-	public static class EqualityContext extends ExprContext {
-		public Token op;
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
-		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
-		}
-		public TerminalNode EQUAL() { return getToken(MyGrammarParser.EQUAL, 0); }
-		public TerminalNode NEQUAL() { return getToken(MyGrammarParser.NEQUAL, 0); }
-		public TerminalNode EQUALCHECK() { return getToken(MyGrammarParser.EQUALCHECK, 0); }
-		public EqualityContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterEquality(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitEquality(this);
-		}
-	}
-	public static class IfContext extends ExprContext {
-		public TerminalNode IF() { return getToken(MyGrammarParser.IF, 0); }
-		public IfContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterIf(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitIf(this);
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZ3variable_name(this);
 		}
 	}
 
-	public final ExprContext expr() throws RecognitionException {
-		return expr(0);
-	}
-
-	private ExprContext expr(int _p) throws RecognitionException {
-		ParserRuleContext _parentctx = _ctx;
-		int _parentState = getState();
-		ExprContext _localctx = new ExprContext(_ctx, _parentState);
-		ExprContext _prevctx = _localctx;
-		int _startState = 24;
-		enterRecursionRule(_localctx, 24, RULE_expr, _p);
+	public final Z3variable_nameContext z3variable_name() throws RecognitionException {
+		Z3variable_nameContext _localctx = new Z3variable_nameContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_z3variable_name);
 		int _la;
 		try {
 			int _alt;
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(129);
+			setState(113);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case NOT:
+			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
-				_localctx = new NotContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-
-				setState(114);
-				match(NOT);
-				setState(115);
-				expr(14);
-				}
-				break;
-			case OPAR:
-				{
-				_localctx = new ParensContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(116);
-				match(OPAR);
-				setState(117);
-				expr(0);
-				setState(118);
-				match(CPAR);
-				}
-				break;
-			case INT:
-				{
-				_localctx = new IntContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(120);
-				match(INT);
-				}
-				break;
-			case BOOL:
-				{
-				_localctx = new BoolContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(121);
-				match(BOOL);
-				}
-				break;
-			case STRING:
-				{
-				_localctx = new StringContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(122);
-				match(STRING);
-				}
-				break;
-			case IDENTIFIER:
-				{
-				_localctx = new IdentifierContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(123);
-				match(IDENTIFIER);
-				}
-				break;
-			case IF:
-				{
-				_localctx = new IfContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(124);
-				match(IF);
-				}
-				break;
-			case ELSE:
-				{
-				_localctx = new ElseContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(125);
-				match(ELSE);
-				}
-				break;
-			case EQUALCHECK:
-				{
-				_localctx = new EqualcheckContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(126);
-				match(EQUALCHECK);
-				}
-				break;
-			case INT_INIT:
-				{
-				_localctx = new IntInitContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(127);
-				match(INT_INIT);
-				}
-				break;
-			case STRING_INIT:
-				{
-				_localctx = new StringInitContext(_localctx);
-				_ctx = _localctx;
-				_prevctx = _localctx;
-				setState(128);
-				match(STRING_INIT);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			_ctx.stop = _input.LT(-1);
-			setState(153);
-			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( _parseListeners!=null ) triggerExitRuleEvent();
-					_prevctx = _localctx;
+				setState(102); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
 					{
-					setState(151);
+					{
+					setState(101);
+					match(ID);
+					}
+					}
+					setState(104); 
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+					_la = _input.LA(1);
+				} while ( _la==ID );
+				setState(106);
+				match(FACT);
+				setState(108); 
+				_errHandler.sync(this);
+				_alt = 1;
+				do {
+					switch (_alt) {
 					case 1:
 						{
-						_localctx = new MulDivContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(131);
-						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
-						setState(132);
-						((MulDivContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==MUL || _la==DIV) ) {
-							((MulDivContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(133);
-						expr(19);
-						}
-						break;
-					case 2:
 						{
-						_localctx = new AddSubContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(134);
-						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
-						setState(135);
-						((AddSubContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==ADD || _la==SUB) ) {
-							((AddSubContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						setState(107);
+						match(NUMBER);
 						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(136);
-						expr(18);
 						}
 						break;
-					case 3:
-						{
-						_localctx = new PowContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(137);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(138);
-						((PowContext)_localctx).op = match(POW);
-						setState(139);
-						expr(17);
-						}
-						break;
-					case 4:
-						{
-						_localctx = new OrContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(140);
-						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(141);
-						match(OR);
-						setState(142);
-						expr(14);
-						}
-						break;
-					case 5:
-						{
-						_localctx = new AndContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(143);
-						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(144);
-						match(AND);
-						setState(145);
-						expr(13);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new EqualityContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(146);
-						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(147);
-						((EqualityContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << EQUAL) | (1L << NEQUAL) | (1L << EQUALCHECK))) != 0)) ) {
-							((EqualityContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(148);
-						expr(12);
-						}
-						break;
-					case 7:
-						{
-						_localctx = new FactContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(149);
-						if (!(precpred(_ctx, 15))) throw new FailedPredicateException(this, "precpred(_ctx, 15)");
-						setState(150);
-						((FactContext)_localctx).op = match(FACT);
-						}
-						break;
+					default:
+						throw new NoViableAltException(this);
 					}
-					} 
+					setState(110); 
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
+				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				}
-				setState(155);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,12,_ctx);
-			}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(112);
+				match(ID);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1664,136 +767,333 @@ public class MyGrammarParser extends Parser {
 			_errHandler.recover(this, re);
 		}
 		finally {
-			unrollRecursionContexts(_parentctx);
+			exitRule();
 		}
 		return _localctx;
 	}
 
-	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
-		switch (ruleIndex) {
-		case 12:
-			return expr_sempred((ExprContext)_localctx, predIndex);
+	public static class Z3expressionContext extends ParserRuleContext {
+		public Z3andContext z3and() {
+			return getRuleContext(Z3andContext.class,0);
 		}
-		return true;
+		public Z3iteContext z3ite() {
+			return getRuleContext(Z3iteContext.class,0);
+		}
+		public Z3comparisonContext z3comparison() {
+			return getRuleContext(Z3comparisonContext.class,0);
+		}
+		public Z3valueContext z3value() {
+			return getRuleContext(Z3valueContext.class,0);
+		}
+		public Z3variable_nameContext z3variable_name() {
+			return getRuleContext(Z3variable_nameContext.class,0);
+		}
+		public TerminalNode NUMBER() { return getToken(MyGrammarParser.NUMBER, 0); }
+		public TerminalNode ID() { return getToken(MyGrammarParser.ID, 0); }
+		public Z3expressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_z3expression; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterZ3expression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitZ3expression(this);
+		}
 	}
-	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
-		switch (predIndex) {
-		case 0:
-			return precpred(_ctx, 18);
-		case 1:
-			return precpred(_ctx, 17);
-		case 2:
-			return precpred(_ctx, 16);
-		case 3:
-			return precpred(_ctx, 13);
-		case 4:
-			return precpred(_ctx, 12);
-		case 5:
-			return precpred(_ctx, 11);
-		case 6:
-			return precpred(_ctx, 15);
+
+	public final Z3expressionContext z3expression() throws RecognitionException {
+		Z3expressionContext _localctx = new Z3expressionContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_z3expression);
+		try {
+			setState(122);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(115);
+				z3and();
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(116);
+				z3ite();
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(117);
+				z3comparison();
+				}
+				break;
+			case 4:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(118);
+				z3value();
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(119);
+				z3variable_name();
+				}
+				break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(120);
+				match(NUMBER);
+				}
+				break;
+			case 7:
+				enterOuterAlt(_localctx, 7);
+				{
+				setState(121);
+				match(ID);
+				}
+				break;
+			}
 		}
-		return true;
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NumberAContext extends ParserRuleContext {
+		public TerminalNode NUMBER() { return getToken(MyGrammarParser.NUMBER, 0); }
+		public NumberAContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_numberA; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterNumberA(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitNumberA(this);
+		}
+	}
+
+	public final NumberAContext numberA() throws RecognitionException {
+		NumberAContext _localctx = new NumberAContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_numberA);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(124);
+			match(NUMBER);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NumberBContext extends ParserRuleContext {
+		public TerminalNode NUMBER() { return getToken(MyGrammarParser.NUMBER, 0); }
+		public NumberBContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_numberB; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterNumberB(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitNumberB(this);
+		}
+	}
+
+	public final NumberBContext numberB() throws RecognitionException {
+		NumberBContext _localctx = new NumberBContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_numberB);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(126);
+			match(NUMBER);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NumberCContext extends ParserRuleContext {
+		public TerminalNode NUMBER() { return getToken(MyGrammarParser.NUMBER, 0); }
+		public NumberCContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_numberC; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterNumberC(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitNumberC(this);
+		}
+	}
+
+	public final NumberCContext numberC() throws RecognitionException {
+		NumberCContext _localctx = new NumberCContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_numberC);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(128);
+			match(NUMBER);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class NumberDContext extends ParserRuleContext {
+		public TerminalNode NUMBER() { return getToken(MyGrammarParser.NUMBER, 0); }
+		public NumberDContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_numberD; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).enterNumberD(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MyGrammarListener ) ((MyGrammarListener)listener).exitNumberD(this);
+		}
+	}
+
+	public final NumberDContext numberD() throws RecognitionException {
+		NumberDContext _localctx = new NumberDContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_numberD);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(130);
+			match(NUMBER);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u001d\u009d\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001"+
-		"\u0002\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004"+
-		"\u0002\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007"+
-		"\u0002\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b"+
-		"\u0002\f\u0007\f\u0001\u0000\u0004\u0000\u001c\b\u0000\u000b\u0000\f\u0000"+
-		"\u001d\u0001\u0000\u0001\u0000\u0001\u0001\u0004\u0001#\b\u0001\u000b"+
-		"\u0001\f\u0001$\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003"+
-		"\u0002+\b\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
-		"\u0003\u0005\u00032\b\u0003\n\u0003\f\u00035\t\u0003\u0001\u0003\u0001"+
-		"\u0003\u0003\u00039\b\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001"+
+		"\u0004\u00014\u0085\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
+		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
+		"\f\u0007\f\u0002\r\u0007\r\u0001\u0000\u0004\u0000\u001e\b\u0000\u000b"+
+		"\u0000\f\u0000\u001f\u0001\u0000\u0001\u0000\u0001\u0001\u0004\u0001%"+
+		"\b\u0001\u000b\u0001\f\u0001&\u0001\u0002\u0001\u0002\u0001\u0002\u0004"+
+		"\u0002,\b\u0002\u000b\u0002\f\u0002-\u0001\u0002\u0001\u0002\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u00037\b\u0003"+
+		"\n\u0003\f\u0003:\t\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u0003"+
+		"?\b\u0003\n\u0003\f\u0003B\t\u0003\u0001\u0003\u0001\u0003\u0001\u0004"+
+		"\u0001\u0004\u0001\u0004\u0004\u0004I\b\u0004\u000b\u0004\f\u0004J\u0001"+
 		"\u0004\u0001\u0004\u0001\u0005\u0001\u0005\u0001\u0005\u0001\u0005\u0001"+
-		"\u0005\u0003\u0005E\b\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
-		"\u0006\u0001\u0006\u0001\u0006\u0003\u0006Y\b\u0006\u0001\u0007\u0001"+
-		"\u0007\u0001\u0007\u0001\u0007\u0003\u0007_\b\u0007\u0001\b\u0001\b\u0001"+
-		"\t\u0001\t\u0001\t\u0001\t\u0001\t\u0001\n\u0001\n\u0003\nj\b\n\u0001"+
-		"\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0003\u000bp\b\u000b\u0001"+
-		"\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001"+
-		"\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0003\f\u0082\b\f\u0001"+
-		"\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001"+
-		"\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001"+
-		"\f\u0001\f\u0005\f\u0098\b\f\n\f\f\f\u009b\t\f\u0001\f\u0000\u0001\u0018"+
-		"\r\u0000\u0002\u0004\u0006\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u0000"+
-		"\u0003\u0001\u0000\u0005\u0006\u0001\u0000\u0007\b\u0001\u0000\u0016\u0018"+
-		"\u00b2\u0000\u001b\u0001\u0000\u0000\u0000\u0002\"\u0001\u0000\u0000\u0000"+
-		"\u0004*\u0001\u0000\u0000\u0000\u0006,\u0001\u0000\u0000\u0000\b:\u0001"+
-		"\u0000\u0000\u0000\nD\u0001\u0000\u0000\u0000\fX\u0001\u0000\u0000\u0000"+
-		"\u000e^\u0001\u0000\u0000\u0000\u0010`\u0001\u0000\u0000\u0000\u0012b"+
-		"\u0001\u0000\u0000\u0000\u0014i\u0001\u0000\u0000\u0000\u0016o\u0001\u0000"+
-		"\u0000\u0000\u0018\u0081\u0001\u0000\u0000\u0000\u001a\u001c\u0003\u0002"+
-		"\u0001\u0000\u001b\u001a\u0001\u0000\u0000\u0000\u001c\u001d\u0001\u0000"+
-		"\u0000\u0000\u001d\u001b\u0001\u0000\u0000\u0000\u001d\u001e\u0001\u0000"+
-		"\u0000\u0000\u001e\u001f\u0001\u0000\u0000\u0000\u001f \u0005\u0000\u0000"+
-		"\u0001 \u0001\u0001\u0000\u0000\u0000!#\u0003\u0004\u0002\u0000\"!\u0001"+
-		"\u0000\u0000\u0000#$\u0001\u0000\u0000\u0000$\"\u0001\u0000\u0000\u0000"+
-		"$%\u0001\u0000\u0000\u0000%\u0003\u0001\u0000\u0000\u0000&+\u0003\u0006"+
-		"\u0003\u0000\'+\u0003\f\u0006\u0000(+\u0003\u0012\t\u0000)+\u0003\u0018"+
-		"\f\u0000*&\u0001\u0000\u0000\u0000*\'\u0001\u0000\u0000\u0000*(\u0001"+
-		"\u0000\u0000\u0000*)\u0001\u0000\u0000\u0000+\u0005\u0001\u0000\u0000"+
-		"\u0000,-\u0005\u0013\u0000\u0000-3\u0003\b\u0004\u0000./\u0005\u0014\u0000"+
-		"\u0000/0\u0005\u0013\u0000\u000002\u0003\b\u0004\u00001.\u0001\u0000\u0000"+
-		"\u000025\u0001\u0000\u0000\u000031\u0001\u0000\u0000\u000034\u0001\u0000"+
-		"\u0000\u000048\u0001\u0000\u0000\u000053\u0001\u0000\u0000\u000067\u0005"+
-		"\u0014\u0000\u000079\u0003\n\u0005\u000086\u0001\u0000\u0000\u000089\u0001"+
-		"\u0000\u0000\u00009\u0007\u0001\u0000\u0000\u0000:;\u0005\u0003\u0000"+
-		"\u0000;<\u0003\u0018\f\u0000<=\u0005\u0004\u0000\u0000=>\u0003\n\u0005"+
-		"\u0000>\t\u0001\u0000\u0000\u0000?@\u0005\u0001\u0000\u0000@A\u0003\u0002"+
-		"\u0001\u0000AB\u0005\u0002\u0000\u0000BE\u0001\u0000\u0000\u0000CE\u0003"+
-		"\u0004\u0002\u0000D?\u0001\u0000\u0000\u0000DC\u0001\u0000\u0000\u0000"+
-		"E\u000b\u0001\u0000\u0000\u0000FG\u0003\u000e\u0007\u0000GH\u0003\u0010"+
-		"\b\u0000HY\u0001\u0000\u0000\u0000IJ\u0003\u000e\u0007\u0000JK\u0003\u0010"+
-		"\b\u0000KL\u0005\u0016\u0000\u0000LM\u0003\u0016\u000b\u0000MY\u0001\u0000"+
-		"\u0000\u0000NO\u0003\u000e\u0007\u0000OP\u0003\u0010\b\u0000PQ\u0005\u0016"+
-		"\u0000\u0000QR\u0003\u0018\f\u0000RY\u0001\u0000\u0000\u0000ST\u0003\u000e"+
-		"\u0007\u0000TU\u0003\u0010\b\u0000UV\u0005\u0016\u0000\u0000VW\u0003\f"+
-		"\u0006\u0000WY\u0001\u0000\u0000\u0000XF\u0001\u0000\u0000\u0000XI\u0001"+
-		"\u0000\u0000\u0000XN\u0001\u0000\u0000\u0000XS\u0001\u0000\u0000\u0000"+
-		"Y\r\u0001\u0000\u0000\u0000Z_\u0005\u0010\u0000\u0000[_\u0005\u000f\u0000"+
-		"\u0000\\_\u0005\u000e\u0000\u0000]_\u0005\u0011\u0000\u0000^Z\u0001\u0000"+
-		"\u0000\u0000^[\u0001\u0000\u0000\u0000^\\\u0001\u0000\u0000\u0000^]\u0001"+
-		"\u0000\u0000\u0000_\u000f\u0001\u0000\u0000\u0000`a\u0005\u001d\u0000"+
-		"\u0000a\u0011\u0001\u0000\u0000\u0000bc\u0005\u0012\u0000\u0000cd\u0005"+
-		"\u0003\u0000\u0000de\u0003\u0014\n\u0000ef\u0005\u0004\u0000\u0000f\u0013"+
-		"\u0001\u0000\u0000\u0000gj\u0003\u0018\f\u0000hj\u0003\f\u0006\u0000i"+
-		"g\u0001\u0000\u0000\u0000ih\u0001\u0000\u0000\u0000j\u0015\u0001\u0000"+
-		"\u0000\u0000kp\u0005\u0019\u0000\u0000lp\u0005\u001c\u0000\u0000mp\u0005"+
-		"\u001b\u0000\u0000np\u0005\u001d\u0000\u0000ok\u0001\u0000\u0000\u0000"+
-		"ol\u0001\u0000\u0000\u0000om\u0001\u0000\u0000\u0000on\u0001\u0000\u0000"+
-		"\u0000p\u0017\u0001\u0000\u0000\u0000qr\u0006\f\uffff\uffff\u0000rs\u0005"+
-		"\u000b\u0000\u0000s\u0082\u0003\u0018\f\u000etu\u0005\u0003\u0000\u0000"+
-		"uv\u0003\u0018\f\u0000vw\u0005\u0004\u0000\u0000w\u0082\u0001\u0000\u0000"+
-		"\u0000x\u0082\u0005\u0019\u0000\u0000y\u0082\u0005\u001b\u0000\u0000z"+
-		"\u0082\u0005\u001c\u0000\u0000{\u0082\u0005\u001d\u0000\u0000|\u0082\u0005"+
-		"\u0013\u0000\u0000}\u0082\u0005\u0014\u0000\u0000~\u0082\u0005\u0018\u0000"+
-		"\u0000\u007f\u0082\u0005\u000e\u0000\u0000\u0080\u0082\u0005\u000f\u0000"+
-		"\u0000\u0081q\u0001\u0000\u0000\u0000\u0081t\u0001\u0000\u0000\u0000\u0081"+
-		"x\u0001\u0000\u0000\u0000\u0081y\u0001\u0000\u0000\u0000\u0081z\u0001"+
-		"\u0000\u0000\u0000\u0081{\u0001\u0000\u0000\u0000\u0081|\u0001\u0000\u0000"+
-		"\u0000\u0081}\u0001\u0000\u0000\u0000\u0081~\u0001\u0000\u0000\u0000\u0081"+
-		"\u007f\u0001\u0000\u0000\u0000\u0081\u0080\u0001\u0000\u0000\u0000\u0082"+
-		"\u0099\u0001\u0000\u0000\u0000\u0083\u0084\n\u0012\u0000\u0000\u0084\u0085"+
-		"\u0007\u0000\u0000\u0000\u0085\u0098\u0003\u0018\f\u0013\u0086\u0087\n"+
-		"\u0011\u0000\u0000\u0087\u0088\u0007\u0001\u0000\u0000\u0088\u0098\u0003"+
-		"\u0018\f\u0012\u0089\u008a\n\u0010\u0000\u0000\u008a\u008b\u0005\t\u0000"+
-		"\u0000\u008b\u0098\u0003\u0018\f\u0011\u008c\u008d\n\r\u0000\u0000\u008d"+
-		"\u008e\u0005\r\u0000\u0000\u008e\u0098\u0003\u0018\f\u000e\u008f\u0090"+
-		"\n\f\u0000\u0000\u0090\u0091\u0005\f\u0000\u0000\u0091\u0098\u0003\u0018"+
-		"\f\r\u0092\u0093\n\u000b\u0000\u0000\u0093\u0094\u0007\u0002\u0000\u0000"+
-		"\u0094\u0098\u0003\u0018\f\f\u0095\u0096\n\u000f\u0000\u0000\u0096\u0098"+
-		"\u0005\n\u0000\u0000\u0097\u0083\u0001\u0000\u0000\u0000\u0097\u0086\u0001"+
-		"\u0000\u0000\u0000\u0097\u0089\u0001\u0000\u0000\u0000\u0097\u008c\u0001"+
-		"\u0000\u0000\u0000\u0097\u008f\u0001\u0000\u0000\u0000\u0097\u0092\u0001"+
-		"\u0000\u0000\u0000\u0097\u0095\u0001\u0000\u0000\u0000\u0098\u009b\u0001"+
-		"\u0000\u0000\u0000\u0099\u0097\u0001\u0000\u0000\u0000\u0099\u009a\u0001"+
-		"\u0000\u0000\u0000\u009a\u0019\u0001\u0000\u0000\u0000\u009b\u0099\u0001"+
-		"\u0000\u0000\u0000\r\u001d$*38DX^io\u0081\u0097\u0099";
+		"\u0005\u0001\u0005\u0001\u0005\u0001\u0006\u0001\u0006\u0001\u0006\u0001"+
+		"\u0006\u0005\u0006Z\b\u0006\n\u0006\f\u0006]\t\u0006\u0001\u0006\u0001"+
+		"\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\b\u0004\bg\b\b\u000b\b\f\bh\u0001\b\u0001\b\u0004\bm\b\b\u000b\b\f\b"+
+		"n\u0001\b\u0003\br\b\b\u0001\t\u0001\t\u0001\t\u0001\t\u0001\t\u0001\t"+
+		"\u0001\t\u0003\t{\b\t\u0001\n\u0001\n\u0001\u000b\u0001\u000b\u0001\f"+
+		"\u0001\f\u0001\r\u0001\r\u0001\r\u0000\u0000\u000e\u0000\u0002\u0004\u0006"+
+		"\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u0000\u0000\u0086\u0000"+
+		"\u001d\u0001\u0000\u0000\u0000\u0002$\u0001\u0000\u0000\u0000\u0004(\u0001"+
+		"\u0000\u0000\u0000\u00061\u0001\u0000\u0000\u0000\bE\u0001\u0000\u0000"+
+		"\u0000\nN\u0001\u0000\u0000\u0000\fU\u0001\u0000\u0000\u0000\u000e`\u0001"+
+		"\u0000\u0000\u0000\u0010q\u0001\u0000\u0000\u0000\u0012z\u0001\u0000\u0000"+
+		"\u0000\u0014|\u0001\u0000\u0000\u0000\u0016~\u0001\u0000\u0000\u0000\u0018"+
+		"\u0080\u0001\u0000\u0000\u0000\u001a\u0082\u0001\u0000\u0000\u0000\u001c"+
+		"\u001e\u0003\u0002\u0001\u0000\u001d\u001c\u0001\u0000\u0000\u0000\u001e"+
+		"\u001f\u0001\u0000\u0000\u0000\u001f\u001d\u0001\u0000\u0000\u0000\u001f"+
+		" \u0001\u0000\u0000\u0000 !\u0001\u0000\u0000\u0000!\"\u0005\u0000\u0000"+
+		"\u0001\"\u0001\u0001\u0000\u0000\u0000#%\u0003\u0004\u0002\u0000$#\u0001"+
+		"\u0000\u0000\u0000%&\u0001\u0000\u0000\u0000&$\u0001\u0000\u0000\u0000"+
+		"&\'\u0001\u0000\u0000\u0000\'\u0003\u0001\u0000\u0000\u0000()\u0005\'"+
+		"\u0000\u0000)+\u0005\u0003\u0000\u0000*,\u0003\u0006\u0003\u0000+*\u0001"+
+		"\u0000\u0000\u0000,-\u0001\u0000\u0000\u0000-+\u0001\u0000\u0000\u0000"+
+		"-.\u0001\u0000\u0000\u0000./\u0001\u0000\u0000\u0000/0\u0005\u0004\u0000"+
+		"\u00000\u0005\u0001\u0000\u0000\u000012\u0005\u0003\u0000\u000023\u0005"+
+		"(\u0000\u000034\u0003\u0010\b\u000048\u0005\u0003\u0000\u000057\u0003"+
+		"\u000e\u0007\u000065\u0001\u0000\u0000\u00007:\u0001\u0000\u0000\u0000"+
+		"86\u0001\u0000\u0000\u000089\u0001\u0000\u0000\u00009;\u0001\u0000\u0000"+
+		"\u0000:8\u0001\u0000\u0000\u0000;<\u0005\u0004\u0000\u0000<@\u0005)\u0000"+
+		"\u0000=?\u0003\u0012\t\u0000>=\u0001\u0000\u0000\u0000?B\u0001\u0000\u0000"+
+		"\u0000@>\u0001\u0000\u0000\u0000@A\u0001\u0000\u0000\u0000AC\u0001\u0000"+
+		"\u0000\u0000B@\u0001\u0000\u0000\u0000CD\u0005\u0004\u0000\u0000D\u0007"+
+		"\u0001\u0000\u0000\u0000EF\u0005\u0003\u0000\u0000FH\u0005+\u0000\u0000"+
+		"GI\u0003\u0012\t\u0000HG\u0001\u0000\u0000\u0000IJ\u0001\u0000\u0000\u0000"+
+		"JH\u0001\u0000\u0000\u0000JK\u0001\u0000\u0000\u0000KL\u0001\u0000\u0000"+
+		"\u0000LM\u0005\u0004\u0000\u0000M\t\u0001\u0000\u0000\u0000NO\u0005\u0003"+
+		"\u0000\u0000OP\u0005*\u0000\u0000PQ\u0003\u0012\t\u0000QR\u0003\u0012"+
+		"\t\u0000RS\u0003\u0012\t\u0000ST\u0005\u0004\u0000\u0000T\u000b\u0001"+
+		"\u0000\u0000\u0000UV\u0005\u0003\u0000\u0000VW\u0005,\u0000\u0000W[\u0003"+
+		"\u0010\b\u0000XZ\u00050\u0000\u0000YX\u0001\u0000\u0000\u0000Z]\u0001"+
+		"\u0000\u0000\u0000[Y\u0001\u0000\u0000\u0000[\\\u0001\u0000\u0000\u0000"+
+		"\\^\u0001\u0000\u0000\u0000][\u0001\u0000\u0000\u0000^_\u0005\u0004\u0000"+
+		"\u0000_\r\u0001\u0000\u0000\u0000`a\u0005\u0003\u0000\u0000ab\u0003\u0010"+
+		"\b\u0000bc\u0005)\u0000\u0000cd\u0005\u0004\u0000\u0000d\u000f\u0001\u0000"+
+		"\u0000\u0000eg\u00054\u0000\u0000fe\u0001\u0000\u0000\u0000gh\u0001\u0000"+
+		"\u0000\u0000hf\u0001\u0000\u0000\u0000hi\u0001\u0000\u0000\u0000ij\u0001"+
+		"\u0000\u0000\u0000jl\u0005\n\u0000\u0000km\u00050\u0000\u0000lk\u0001"+
+		"\u0000\u0000\u0000mn\u0001\u0000\u0000\u0000nl\u0001\u0000\u0000\u0000"+
+		"no\u0001\u0000\u0000\u0000or\u0001\u0000\u0000\u0000pr\u00054\u0000\u0000"+
+		"qf\u0001\u0000\u0000\u0000qp\u0001\u0000\u0000\u0000r\u0011\u0001\u0000"+
+		"\u0000\u0000s{\u0003\b\u0004\u0000t{\u0003\n\u0005\u0000u{\u0003\f\u0006"+
+		"\u0000v{\u0003\u0006\u0003\u0000w{\u0003\u0010\b\u0000x{\u00050\u0000"+
+		"\u0000y{\u00054\u0000\u0000zs\u0001\u0000\u0000\u0000zt\u0001\u0000\u0000"+
+		"\u0000zu\u0001\u0000\u0000\u0000zv\u0001\u0000\u0000\u0000zw\u0001\u0000"+
+		"\u0000\u0000zx\u0001\u0000\u0000\u0000zy\u0001\u0000\u0000\u0000{\u0013"+
+		"\u0001\u0000\u0000\u0000|}\u00050\u0000\u0000}\u0015\u0001\u0000\u0000"+
+		"\u0000~\u007f\u00050\u0000\u0000\u007f\u0017\u0001\u0000\u0000\u0000\u0080"+
+		"\u0081\u00050\u0000\u0000\u0081\u0019\u0001\u0000\u0000\u0000\u0082\u0083"+
+		"\u00050\u0000\u0000\u0083\u001b\u0001\u0000\u0000\u0000\u000b\u001f&-"+
+		"8@J[hnqz";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

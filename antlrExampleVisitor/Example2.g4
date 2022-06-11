@@ -9,10 +9,10 @@ statement //statement
  | loop #loopStatement
  | ifStat #ifStatement
  | url #urlStatement
- | z3OutputSudokuA #Z3OutputWeek3
  | LEFTCURL statement+ RIGHTCURL #statementBody
  | declareFunctions #declareFunction
  | call_functions #callFunctions
+ | RETURN expression #multipleReturns
  | expression #expr
  ;
 
@@ -90,12 +90,7 @@ function_parameters: parameter_variables
                    | COMMA parameter_variables
 ;
 
-z3OutputSudokuA: SAT OPAR z3OutputSudokuA* CPAR #satBody
-                | OPAR DEFINEFUN Z3VARNAME OPAR CPAR Z3INT NUMBER CPAR #defineFunBody
-                ;
-
 //bool_expression:
-
 numberA		: NUMBER;
 numberB		: NUMBER;
 numberC		: NUMBER;
@@ -122,11 +117,9 @@ INT_INIT: 'int_var';
 STRING_INIT: 'string_var';
 BOOL_INIT: 'bool_var';
 CHAR_INIT: 'char_var';
-
 INT_PARAM: 'int_par';
 STRING_PARAM: 'string_par';
 BOOL_PARAM: 'bool_par';
-
 PRINT: 'print';
 IF: 'if';
 FOR: 'for';
@@ -136,15 +129,16 @@ THEN		: 'then';
 DO			: 'do';
 DOT			: '.';
 ELSE: 'else';
-SAT: 'sat';
-DEFINEFUN: 'define-fun';
 DECLAREFUNVOID: 'declare_fun_void';
 DECLAREFUNSTRING: 'declare_fun_string';
 DECLAREFUNINT: 'declare_fun_int';
 DECLAREFUNBOOL: 'declare_fun_bool';
 RETURN: 'return';
+SAT: 'sat';
+DEFINEFUN: 'define-fun';
 Z3INT: 'Int';
-Z3VARNAME: [a-z][0-9][0-9]*;
+ITE: 'ite';
+Z3AND: 'and';
 EQUAL: '=';
 NEQUAL: '!=';
 EQUALCHECK: '==';

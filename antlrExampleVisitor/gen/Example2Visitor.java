@@ -52,12 +52,12 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUrlStatement(Example2Parser.UrlStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Z3OutputWeek3}
+	 * Visit a parse tree produced by the {@code Z3Output}
 	 * labeled alternative in {@link Example2Parser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitZ3OutputWeek3(Example2Parser.Z3OutputWeek3Context ctx);
+	T visitZ3Output(Example2Parser.Z3OutputContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statementBody}
 	 * labeled alternative in {@link Example2Parser#statement}.
@@ -359,19 +359,58 @@ public interface Example2Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunction_parameters(Example2Parser.Function_parametersContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code satBody}
-	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.
+	 * Visit a parse tree produced by {@link Example2Parser#z3Statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSatBody(Example2Parser.SatBodyContext ctx);
+	T visitZ3Statement(Example2Parser.Z3StatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code defineFunBody}
-	 * labeled alternative in {@link Example2Parser#z3OutputSudokuA}.
+	 * Visit a parse tree produced by the {@code zValue}
+	 * labeled alternative in {@link Example2Parser#z3value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefineFunBody(Example2Parser.DefineFunBodyContext ctx);
+	T visitZValue(Example2Parser.ZValueContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code zAndStatement}
+	 * labeled alternative in {@link Example2Parser#z3and}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZAndStatement(Example2Parser.ZAndStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code zITEStatement}
+	 * labeled alternative in {@link Example2Parser#z3ite}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZITEStatement(Example2Parser.ZITEStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code zcomparisonStatement}
+	 * labeled alternative in {@link Example2Parser#z3comparison}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZcomparisonStatement(Example2Parser.ZcomparisonStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code zvariableDeclaration}
+	 * labeled alternative in {@link Example2Parser#z3variable_declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZvariableDeclaration(Example2Parser.ZvariableDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#z3variable_name}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZ3variable_name(Example2Parser.Z3variable_nameContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link Example2Parser#z3expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitZ3expression(Example2Parser.Z3expressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link Example2Parser#numberA}.
 	 * @param ctx the parse tree

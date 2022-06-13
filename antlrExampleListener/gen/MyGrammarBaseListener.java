@@ -1,5 +1,5 @@
 // Generated from MyGrammar.g4 by ANTLR 4.10.1
-package gen;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -75,6 +75,54 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterZ3or(MyGrammarParser.Z3orContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3or(MyGrammarParser.Z3orContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterZ3not(MyGrammarParser.Z3notContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3not(MyGrammarParser.Z3notContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterZ3add(MyGrammarParser.Z3addContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3add(MyGrammarParser.Z3addContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterZ3subtract(MyGrammarParser.Z3subtractContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3subtract(MyGrammarParser.Z3subtractContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterZITEStatement(MyGrammarParser.ZITEStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -111,6 +159,18 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterZ3var_type(MyGrammarParser.Z3var_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3var_type(MyGrammarParser.Z3var_typeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterZ3variable_name(MyGrammarParser.Z3variable_nameContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -118,6 +178,18 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitZ3variable_name(MyGrammarParser.Z3variable_nameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterZ3equality(MyGrammarParser.Z3equalityContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitZ3equality(MyGrammarParser.Z3equalityContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -135,49 +207,109 @@ public class MyGrammarBaseListener implements MyGrammarListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberA(MyGrammarParser.NumberAContext ctx) { }
+	@Override public void enterZ3_let(MyGrammarParser.Z3_letContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberA(MyGrammarParser.NumberAContext ctx) { }
+	@Override public void exitZ3_let(MyGrammarParser.Z3_letContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberB(MyGrammarParser.NumberBContext ctx) { }
+	@Override public void enterZ3_let_rule(MyGrammarParser.Z3_let_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberB(MyGrammarParser.NumberBContext ctx) { }
+	@Override public void exitZ3_let_rule(MyGrammarParser.Z3_let_ruleContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberC(MyGrammarParser.NumberCContext ctx) { }
+	@Override public void enterStr_method(MyGrammarParser.Str_methodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberC(MyGrammarParser.NumberCContext ctx) { }
+	@Override public void exitStr_method(MyGrammarParser.Str_methodContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberD(MyGrammarParser.NumberDContext ctx) { }
+	@Override public void enterStr_len(MyGrammarParser.Str_lenContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberD(MyGrammarParser.NumberDContext ctx) { }
+	@Override public void exitStr_len(MyGrammarParser.Str_lenContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStr_substr(MyGrammarParser.Str_substrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStr_substr(MyGrammarParser.Str_substrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStr_at(MyGrammarParser.Str_atContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStr_at(MyGrammarParser.Str_atContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStr_concatation(MyGrammarParser.Str_concatationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStr_concatation(MyGrammarParser.Str_concatationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInt_to_str(MyGrammarParser.Int_to_strContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInt_to_str(MyGrammarParser.Int_to_strContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOther(MyGrammarParser.OtherContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOther(MyGrammarParser.OtherContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

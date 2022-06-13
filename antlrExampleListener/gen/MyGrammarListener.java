@@ -1,5 +1,4 @@
 // Generated from MyGrammar.g4 by ANTLR 4.10.1
-package gen;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -62,6 +61,46 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitZAndStatement(MyGrammarParser.ZAndStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3or}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3or(MyGrammarParser.Z3orContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3or}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3or(MyGrammarParser.Z3orContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3not}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3not(MyGrammarParser.Z3notContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3not}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3not(MyGrammarParser.Z3notContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3add}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3add(MyGrammarParser.Z3addContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3add}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3add(MyGrammarParser.Z3addContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3subtract}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3subtract(MyGrammarParser.Z3subtractContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3subtract}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3subtract(MyGrammarParser.Z3subtractContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code zITEStatement}
 	 * labeled alternative in {@link MyGrammarParser#z3ite}.
 	 * @param ctx the parse tree
@@ -98,6 +137,16 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitZvariableDeclaration(MyGrammarParser.ZvariableDeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3var_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3var_type(MyGrammarParser.Z3var_typeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3var_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3var_type(MyGrammarParser.Z3var_typeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MyGrammarParser#z3variable_name}.
 	 * @param ctx the parse tree
 	 */
@@ -107,6 +156,16 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitZ3variable_name(MyGrammarParser.Z3variable_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3equality}.
+	 * @param ctx the parse tree
+	 */
+	void enterZ3equality(MyGrammarParser.Z3equalityContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3equality}.
+	 * @param ctx the parse tree
+	 */
+	void exitZ3equality(MyGrammarParser.Z3equalityContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MyGrammarParser#z3expression}.
 	 * @param ctx the parse tree
@@ -118,43 +177,93 @@ public interface MyGrammarListener extends ParseTreeListener {
 	 */
 	void exitZ3expression(MyGrammarParser.Z3expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#numberA}.
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3_let}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberA(MyGrammarParser.NumberAContext ctx);
+	void enterZ3_let(MyGrammarParser.Z3_letContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#numberA}.
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3_let}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberA(MyGrammarParser.NumberAContext ctx);
+	void exitZ3_let(MyGrammarParser.Z3_letContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#numberB}.
+	 * Enter a parse tree produced by {@link MyGrammarParser#z3_let_rule}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberB(MyGrammarParser.NumberBContext ctx);
+	void enterZ3_let_rule(MyGrammarParser.Z3_let_ruleContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#numberB}.
+	 * Exit a parse tree produced by {@link MyGrammarParser#z3_let_rule}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberB(MyGrammarParser.NumberBContext ctx);
+	void exitZ3_let_rule(MyGrammarParser.Z3_let_ruleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#numberC}.
+	 * Enter a parse tree produced by {@link MyGrammarParser#str_method}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberC(MyGrammarParser.NumberCContext ctx);
+	void enterStr_method(MyGrammarParser.Str_methodContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#numberC}.
+	 * Exit a parse tree produced by {@link MyGrammarParser#str_method}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberC(MyGrammarParser.NumberCContext ctx);
+	void exitStr_method(MyGrammarParser.Str_methodContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MyGrammarParser#numberD}.
+	 * Enter a parse tree produced by {@link MyGrammarParser#str_len}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberD(MyGrammarParser.NumberDContext ctx);
+	void enterStr_len(MyGrammarParser.Str_lenContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MyGrammarParser#numberD}.
+	 * Exit a parse tree produced by {@link MyGrammarParser#str_len}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberD(MyGrammarParser.NumberDContext ctx);
+	void exitStr_len(MyGrammarParser.Str_lenContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#str_substr}.
+	 * @param ctx the parse tree
+	 */
+	void enterStr_substr(MyGrammarParser.Str_substrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#str_substr}.
+	 * @param ctx the parse tree
+	 */
+	void exitStr_substr(MyGrammarParser.Str_substrContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#str_at}.
+	 * @param ctx the parse tree
+	 */
+	void enterStr_at(MyGrammarParser.Str_atContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#str_at}.
+	 * @param ctx the parse tree
+	 */
+	void exitStr_at(MyGrammarParser.Str_atContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#str_concatation}.
+	 * @param ctx the parse tree
+	 */
+	void enterStr_concatation(MyGrammarParser.Str_concatationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#str_concatation}.
+	 * @param ctx the parse tree
+	 */
+	void exitStr_concatation(MyGrammarParser.Str_concatationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#int_to_str}.
+	 * @param ctx the parse tree
+	 */
+	void enterInt_to_str(MyGrammarParser.Int_to_strContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#int_to_str}.
+	 * @param ctx the parse tree
+	 */
+	void exitInt_to_str(MyGrammarParser.Int_to_strContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MyGrammarParser#other}.
+	 * @param ctx the parse tree
+	 */
+	void enterOther(MyGrammarParser.OtherContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MyGrammarParser#other}.
+	 * @param ctx the parse tree
+	 */
+	void exitOther(MyGrammarParser.OtherContext ctx);
 }

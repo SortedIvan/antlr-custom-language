@@ -18,27 +18,20 @@ class MyListener extends MyGrammarBaseListener
 	private final Stack<Integer> numberStack = new Stack<>();
 	Map<String, String> storageZ3SudokuA = new HashMap<String, String>();
 	Map<Integer, String> storageZ3SudokuB = new HashMap<Integer, String>();
-	Map<String, Pair<String, String>> graph = new HashMap();
+	Map<Pair<String, String>, String> graph = new HashMap();
 	List<String> vertices = new ArrayList<>();
+	List<String> verticesWithOutgoingEdges = new ArrayList<>();
 	List<String> edges = new ArrayList<>();
+	GraphVizHelper graphVisualisation = new GraphVizHelper("Typoto ime na typata grapha");
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
-	{ 
-		// TODO: investigate contents of 'ctx'
+	{
 		System.err.println("enterMyStart()");
 	}
 	
 	@Override public void exitMyStart(MyGrammarParser.MyStartContext ctx) 
-	{ 
-		// TODO: investigate contents of 'ctx'
+	{
 		System.err.println("exitMyStart()");
 	}
-	
-//	@Override public void visitTerminal(TerminalNode node)
-//	{
-//		System.err.println("terminal-node: '" + node.getText() + "'");
-//		// TODO: print line+column, token's type, etc.
-//	}
-	// TODO: override other methods of 'MyGrammarBaseListener'
 
 
 	@Override
@@ -113,16 +106,6 @@ class MyListener extends MyGrammarBaseListener
 		super.exitZITEStatement(ctx);
 	}
 
-//	@Override
-//	public void exitZAndStatement(MyGrammarParser.ZAndStatementContext ctx) {
-//		System.err.println(ctx.z3expression(0).);
-//	}
-
-	@Override
-	public void exitZcomparisonStatement(MyGrammarParser.ZcomparisonStatementContext ctx) {
-
-
-	}
 
 	@Override
 	public void exitZAndStatement(MyGrammarParser.ZAndStatementContext ctx) {
@@ -140,9 +123,17 @@ class MyListener extends MyGrammarBaseListener
 		if (!vertices.contains(secondNum)){
 			vertices.add(secondNum);
 		}
-		System.err.println(vertices);
-		graph.put(letter, new Pair(firstNum,secondNum));
-		System.err.println("Printed at once");
+		if (!verticesWithOutgoingEdges.contains(firstNum)){
+			verticesWithOutgoingEdges.add(firstNum);
+		}
+		graph.put(new Pair(firstNum,secondNum), letter);
+
+		if(graph.keySet().size() == 10){
+			graphVisualisation.SetVertices(vertices);
+			graphVisualisation.SetVerticesWithOutgoingEdges(verticesWithOutgoingEdges);
+			String s = graphVisualisation.getGraphVizScript(graph);
+			System.err.println(s);
+		}
 
 		super.exitZAndStatement(ctx);
 	}
@@ -157,8 +148,6 @@ public class Main
 
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-		// TODO: print the lexer's vocabulary and the actual list of tokens 
-		
         MyGrammarParser parser = new MyGrammarParser(tokens);
 
         ParseTree tree = parser.myStart();
@@ -171,16 +160,45 @@ public class Main
 class GraphVizHelper {
 
 	String graphName;
-	List<String> doubleCircledEdges = new ArrayList<>();
+	List<String> vertices = new ArrayList<>();
+	List<String> verticesWithOutgoingEdges = new ArrayList<>();
 
+	public void SetVertices(List<String> v) {
+		this.vertices = v;
+	}
+	public void SetVerticesWithOutgoingEdges(List<String> v) {
+		this.verticesWithOutgoingEdges = v;
+	}
 	public GraphVizHelper(String graphName){
-
+		this.graphName = graphName;
 	}
 
-	public List<String> CheckDoubleCircled(Map<String, Pair<String, String>> graphBate){ // Map (1: Edge, 2: Nr1 - N2
-		for (int i = 0; i < graphBate.size(); i++){
-			//graphBate.get()
+	public String getGraphVizScript(Map<Pair<String, String>, String> graph){
+		StringBuilder s = new StringBuilder("digraph " + graphName + " {\n" +
+				"  rankdir = LR\n" +
+				"  node [shape = circle, style = filled, fillcolor = white, fontname = Arial]\n" +
+				"  edge [fontname = Arial]\n" +
+				"  dummy [style = filled, fontcolor = white, color = white]\n" +
+				"  \n" +
+				"  dummy -> 0\n");
+		for (String doubleCircledVertex : this.CheckDoubleCircled()) {
+			s.append("  " + doubleCircledVertex +" [shape = doublecircle]\n");
 		}
+		for (var connection: graph.keySet()) {
+			s.append("  " + connection.a + " -> " + connection.b + " [label = \"" + graph.get(connection) + "\"]\n");
+		}
+		s.append("}");
+		return s.toString();
+	}
+
+	public List<String> CheckDoubleCircled(){
+		List<String> doubleCircled = new ArrayList<>();
+		for (int i = 0; i < this.vertices.size(); i++){
+			if(!this.verticesWithOutgoingEdges.contains(this.vertices.get(i))){
+				doubleCircled.add(this.vertices.get(i));
+			}
+		}
+		return doubleCircled;
 	}
 
 }

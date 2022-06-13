@@ -5,10 +5,16 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Pair;
 import org.antlr.v4.runtime.tree.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
-
+import java.util.List;
 
 
 class MyListener extends MyGrammarBaseListener
@@ -22,7 +28,7 @@ class MyListener extends MyGrammarBaseListener
 	List<String> vertices = new ArrayList<>();
 	List<String> verticesWithOutgoingEdges = new ArrayList<>();
 	List<String> edges = new ArrayList<>();
-	GraphVizHelper graphVisualisation = new GraphVizHelper("Typoto ime na typata grapha");
+	GraphVizHelper graphVisualisation = new GraphVizHelper("GraphWow");
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
 	{
 		System.err.println("enterMyStart()");
@@ -133,12 +139,17 @@ class MyListener extends MyGrammarBaseListener
 			graphVisualisation.SetVerticesWithOutgoingEdges(verticesWithOutgoingEdges);
 			String s = graphVisualisation.getGraphVizScript(graph);
 			System.err.println(s);
+			try {
+				graphVisualisation.writeToGraphDotFile(s);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		super.exitZAndStatement(ctx);
 	}
 }
-
 public class Main 
 {
     public static void main(String[] args) throws Exception 
@@ -200,5 +211,33 @@ class GraphVizHelper {
 		}
 		return doubleCircled;
 	}
+
+	public void writeToGraphDotFile(String graphInformation) throws IOException {
+
+		Path path = Paths.get("graph.dot");
+		FileWriter myWriter = new FileWriter("graph.dot");
+		myWriter.write("");
+		myWriter.write(graphInformation);
+		myWriter.close();
+		this.DisplayGraphPicture();
+	}
+
+	public void DisplayGraphPicture(){
+		String[] cmd = { "dot.exe", "-Tpng", "-ograph.png", "graph.dot" };
+
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec(cmd);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			p.waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 }

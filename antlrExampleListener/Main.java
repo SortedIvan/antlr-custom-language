@@ -28,6 +28,7 @@ class MyListener extends MyGrammarBaseListener
 	List<String> vertices = new ArrayList<>();
 	List<String> verticesWithOutgoingEdges = new ArrayList<>();
 	List<String> edges = new ArrayList<>();
+	List<String> functions = new ArrayList<>();
 	GraphVizHelper graphVisualisation = new GraphVizHelper("GraphWow");
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
 	{
@@ -112,9 +113,16 @@ class MyListener extends MyGrammarBaseListener
 		super.exitZITEStatement(ctx);
 	}
 
+	@Override
+	public void exitZValue(MyGrammarParser.ZValueContext ctx) {
+		functions.add(ctx.z3variable_name().getText());
+	}
 
 	@Override
 	public void exitZAndStatement(MyGrammarParser.ZAndStatementContext ctx) {
+		if(functions.size() > 3){
+			return;
+		}
 		String a = ctx.z3expression().get(0).getText();
 		String b = ctx.z3expression().get(1).getText();
 		String c = ctx.z3expression().get(2).getText();
@@ -147,7 +155,6 @@ class MyListener extends MyGrammarBaseListener
 			}
 		}
 
-		super.exitZAndStatement(ctx);
 	}
 }
 public class Main 

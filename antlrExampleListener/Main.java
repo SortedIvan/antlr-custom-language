@@ -27,9 +27,9 @@ class MyListener extends MyGrammarBaseListener
 	Map<Pair<String, String>, String> graph = new HashMap();
 	List<String> vertices = new ArrayList<>();
 	List<String> verticesWithOutgoingEdges = new ArrayList<>();
-	List<String> edges = new ArrayList<>();
 	List<String> functions = new ArrayList<>();
 	GraphVizHelper graphVisualisation = new GraphVizHelper("GraphWow");
+	Integer nrOfLines = 10; // This changes with the amount of lines (functions) entered in the input
 	@Override public void enterMyStart(MyGrammarParser.MyStartContext ctx)
 	{
 		System.err.println("enterMyStart()");
@@ -142,7 +142,7 @@ class MyListener extends MyGrammarBaseListener
 		}
 		graph.put(new Pair(firstNum,secondNum), letter);
 
-		if(graph.keySet().size() == 10){
+		if(graph.keySet().size() == nrOfLines){
 			graphVisualisation.SetVertices(vertices);
 			graphVisualisation.SetVerticesWithOutgoingEdges(verticesWithOutgoingEdges);
 			String s = graphVisualisation.getGraphVizScript(graph);
